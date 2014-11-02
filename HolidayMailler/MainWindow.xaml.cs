@@ -18,9 +18,20 @@ namespace HolidayMailler
 
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public MainWindow ()
         {
             InitializeComponent();
+        }
+
+        private void addContactMenu_Click (object sender, RoutedEventArgs e)
+        {
+            AddContactWindow contactWindow = new AddContactWindow();
+            contactWindow.ShowDialog();
+        }
+
+        private void aboutMenu_Click (object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Holiday Mailer\n\nTeam: Guardians of the Repository\nVersion: 0.00000001");
         }
     }
 }
