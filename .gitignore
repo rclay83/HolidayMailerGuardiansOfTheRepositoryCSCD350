@@ -158,5 +158,4 @@ $RECYCLE.BIN/
 
 # Includes
 ##############
-!ContactData/**/*.dll
-!ContactDataTest/**/*.dll
+!*.dll
