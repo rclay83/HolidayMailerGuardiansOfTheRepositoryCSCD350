@@ -5,6 +5,8 @@ using System.Data.SQLite;
 using System.Collections.Generic;
 using System.Data;
 
+
+//todo: write test where lastname is null
 namespace ContactDataTest
 {
     [TestClass]
@@ -18,7 +20,25 @@ namespace ContactDataTest
             IContactDao cdao = new ContactDao();
             IContact expected = new MockContact();
             cdao.Connection = conn;
-            cdao.addContact(expected);
+
+            string sql = "INSERT INTO AllContacts(first_name, last_name, email, got_mail) ";
+                sql += "VALUES ('" + expected.FirstName + "', '" + expected.LastName + "',";
+            sql+= "'"+expected.Email+"','";
+            sql+= expected.GotMail +"');";
+            
+            try
+            {
+                IDbCommand command = conn.CreateCommand();
+                command.CommandText = sql;
+                conn.Open();
+                command.ExecuteNonQuery();
+               
+            }
+            finally
+            {
+                conn.Close();
+            }
+
             IDictionary<String, IContact> map = cdao.getAllContacts();
 
             Assert.AreEqual(expected.FirstName, map[expected.Email].FirstName);
