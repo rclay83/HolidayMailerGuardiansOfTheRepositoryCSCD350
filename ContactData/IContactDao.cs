@@ -15,5 +15,6 @@ namespace ContactData
         bool addContact(IContact toAdd);
         bool removeContact(IContact toRemove);
         bool updateContact(IContact toUpdate);
+        void verifyTable();
     }
 }

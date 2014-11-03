@@ -35,10 +35,11 @@ namespace ContactData
             {
                 verifyTable();
                 command.CommandText = "SELECT * FROM AllContacts;";
+                IDataReader dataReader = null;
                 try
                 {
                     connection.Open();
-                    IDataReader dataReader = command.ExecuteReader();
+                    dataReader = command.ExecuteReader();
                     IContact contactToAdd;
                     while (dataReader.Read())
                     {
@@ -52,14 +53,18 @@ namespace ContactData
                         }
                         map.Add(contactToAdd.Email, contactToAdd);
                     }
-                    dataReader.Close();
+                    
                 }
                 //catch(Exception err)
                 //{
-                //todo: implement try/catch logic
+                //todo: implement try/catch logic. throw custom exception
                 //}
                 finally
                 {
+                    if(null != dataReader)
+                    {
+                        dataReader.Close();
+                    }
                     connection.Close();
                 }
 
@@ -67,7 +72,7 @@ namespace ContactData
             return map;
         }
 
-        private void verifyTable()
+        public void verifyTable()
         {
             if (null != connection)
             {
@@ -117,10 +122,11 @@ namespace ContactData
                     return true;
 
                 }
-                catch
-                {
-                    return false;
-                }
+                //catch
+                //{
+                //todo: throw custom exception here
+                //    return false; 
+                //}
                 finally
                 {
                     connection.Close();
