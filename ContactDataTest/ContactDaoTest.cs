@@ -51,7 +51,7 @@ namespace ContactDataTest
             IContactDao cdao = new ContactDao(conn);
             IContact toAdd = new MockContact();
             cdao.addContact(toAdd);
-
+            
             using(IDbCommand cmd = conn.CreateCommand())
             {
                 try
@@ -89,6 +89,41 @@ namespace ContactDataTest
                     conn.Close();
                 }
             }
+        }
+
+        [TestCleanup]
+        public void cleanUpConnections()
+        {
+            this.conn.Close();
+        }
+
+        [TestMethod]
+        public void TestAddContactWithoutLastName()
+        {
+            IContactDao cdao = new ContactDao();
+            cdao.Connection = this.conn;
+            IContact mock = new MockContact();
+            IContact toAdd = new Contact() { FirstName = mock.FirstName, Email = mock.Email };
+
+            cdao.addContact(toAdd);
+
+            using (IDbCommand cmd = conn.CreateCommand())
+            {
+                try
+                {
+                    cmd.CommandText = "SELECT * FROM AllContacts WHERE email = '";
+                    cmd.CommandText += toAdd.Email + "';";
+                    conn.Open();
+                    IDataReader dr = cmd.ExecuteReader();
+                    dr.Read();
+                    Assert.AreEqual(toAdd.FirstName, (string)dr["first_name"]);
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+
         }
 
     }
