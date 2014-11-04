@@ -46,6 +46,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contact.cs" />
+    <Compile Include="ContactDataExcpetion.cs" />
+    <Compile Include="MockContactDao.cs" />
     <Compile Include="ContactDao.cs" />
     <Compile Include="IContact.cs" />
     <Compile Include="IContactDao.cs" />

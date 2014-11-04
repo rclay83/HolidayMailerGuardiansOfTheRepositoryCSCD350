@@ -15,7 +15,10 @@ namespace ContactData
 
 
 
-        public ContactDao() { }
+        public ContactDao() 
+        {
+            this.connection = new SQLiteConnection("Data Source=Contacts.db;Version=3;New=True;Compress=True;");
+        }
         public ContactDao(IDbConnection conn)
         {
 
@@ -33,7 +36,7 @@ namespace ContactData
             IDictionary<String, IContact> map = new Dictionary<String, IContact>();
             using (IDbCommand command = connection.CreateCommand())
             {
-                verifyTable();
+                verifyTable(this.connection);
                 command.CommandText = "SELECT * FROM AllContacts;";
                 IDataReader dataReader = null;
                 try
@@ -44,12 +47,20 @@ namespace ContactData
                     while (dataReader.Read())
                     {
                         contactToAdd = new Contact();
-                        contactToAdd.Email = (string)dataReader["email"];
-                        contactToAdd.FirstName = (string)dataReader["first_name"];
-                        string lastName = (string)dataReader["last_name"];
-                        if (null != lastName)
+
+                        if (null != dataReader["email"])
                         {
-                            contactToAdd.LastName = lastName;
+                            contactToAdd.Email = (string)dataReader["email"];
+
+                        }
+                        if(null != dataReader["first_name"])
+                        {
+                            contactToAdd.FirstName = (string)dataReader["first_name"];
+                        }
+                      
+                        if (null != dataReader["last_name"])
+                        {
+                            contactToAdd.LastName = (string)dataReader["last_name"];
                         }
                         map.Add(contactToAdd.Email, contactToAdd);
                     }
@@ -72,7 +83,10 @@ namespace ContactData
             return map;
         }
 
-        public void verifyTable()
+       
+
+
+        public void verifyTable(IDbConnection connection)
         {
             if (null != connection)
             {
@@ -102,6 +116,14 @@ namespace ContactData
 
         public bool addContact(IContact toAdd)
         {
+            if (null == toAdd.FirstName || null == toAdd.Email)
+            {
+                throw new ContactDataExcpetion("Missing required table field");
+            }
+            if (0 == toAdd.FirstName.Length || 0 == toAdd.Email.Length)
+            {
+                throw new ContactDataExcpetion("Missing required table field");
+            }
             using (IDbCommand command = connection.CreateCommand())
             {
                 try
@@ -116,7 +138,7 @@ namespace ContactData
                     command.Parameters.Add(new SQLiteParameter("@email") { Value = toAdd.Email });
                     command.Parameters.Add(new SQLiteParameter("@got_mail") { Value = toAdd.GotMail });
 
-                    verifyTable();
+                    verifyTable(this.connection);
                     connection.Open();
                     command.ExecuteNonQuery();
                     return true;
