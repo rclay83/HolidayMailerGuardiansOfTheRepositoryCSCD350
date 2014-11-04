@@ -8,12 +8,12 @@ namespace Mail
 {
     interface IMail
     {
-        public string[] Recipients { get; set; }
+        string[] Recipients { get; set; }
 
-        public string Subject { get; set; }
+        string Subject { get; set; }
 
-        public string Body { get; set; }
+        string Body { get; set; }
 
-        public string Sender { get; set; }
+        string Sender { get; set; }
     }
 }
