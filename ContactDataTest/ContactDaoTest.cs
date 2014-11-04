@@ -96,6 +96,14 @@ namespace ContactDataTest
             cdao.addContact(toAdd);
 
         }
+
+        [TestMethod]
+        public void TestGetContactsEmptyDB()
+        {
+            IContactDao cdao = new ContactDao();
+            IDictionary<string, IContact> map = cdao.getAllContacts();
+            Assert.IsTrue(map.Count == 0);
+        }
     }
 }
        
