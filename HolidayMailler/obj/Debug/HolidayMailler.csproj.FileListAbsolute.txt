@@ -1,0 +1,17 @@
+E:\Documents\My Documents\College Assignments\CSCD350\Project\HolidayMailerGuardiansOfTheRepositoryCSCD350\HolidayMailler\bin\Debug\HolidayMailler.exe.config
+E:\Documents\My Documents\College Assignments\CSCD350\Project\HolidayMailerGuardiansOfTheRepositoryCSCD350\HolidayMailler\bin\Debug\HolidayMailler.exe
+E:\Documents\My Documents\College Assignments\CSCD350\Project\HolidayMailerGuardiansOfTheRepositoryCSCD350\HolidayMailler\bin\Debug\HolidayMailler.pdb
+E:\Documents\My Documents\College Assignments\CSCD350\Project\HolidayMailerGuardiansOfTheRepositoryCSCD350\HolidayMailler\obj\Debug\HolidayMailler.csprojResolveAssemblyReference.cache
+E:\Documents\My Documents\College Assignments\CSCD350\Project\HolidayMailerGuardiansOfTheRepositoryCSCD350\HolidayMailler\obj\Debug\MainWindow.baml
+E:\Documents\My Documents\College Assignments\CSCD350\Project\HolidayMailerGuardiansOfTheRepositoryCSCD350\HolidayMailler\obj\Debug\MainWindow.g.cs
+E:\Documents\My Documents\College Assignments\CSCD350\Project\HolidayMailerGuardiansOfTheRepositoryCSCD350\HolidayMailler\obj\Debug\App.g.cs
+E:\Documents\My Documents\College Assignments\CSCD350\Project\HolidayMailerGuardiansOfTheRepositoryCSCD350\HolidayMailler\obj\Debug\HolidayMailler_MarkupCompile.cache
+E:\Documents\My Documents\College Assignments\CSCD350\Project\HolidayMailerGuardiansOfTheRepositoryCSCD350\HolidayMailler\obj\Debug\HolidayMailler.g.resources
+E:\Documents\My Documents\College Assignments\CSCD350\Project\HolidayMailerGuardiansOfTheRepositoryCSCD350\HolidayMailler\obj\Debug\HolidayMailler.Properties.Resources.resources
+E:\Documents\My Documents\College Assignments\CSCD350\Project\HolidayMailerGuardiansOfTheRepositoryCSCD350\HolidayMailler\obj\Debug\HolidayMailler.csproj.GenerateResource.Cache
+E:\Documents\My Documents\College Assignments\CSCD350\Project\HolidayMailerGuardiansOfTheRepositoryCSCD350\HolidayMailler\obj\Debug\HolidayMailler.exe
+E:\Documents\My Documents\College Assignments\CSCD350\Project\HolidayMailerGuardiansOfTheRepositoryCSCD350\HolidayMailler\obj\Debug\HolidayMailler.pdb
+E:\Documents\My Documents\College Assignments\CSCD350\Project\HolidayMailerGuardiansOfTheRepositoryCSCD350\HolidayMailler\obj\Debug\AddContactWindow.baml
+E:\Documents\My Documents\College Assignments\CSCD350\Project\HolidayMailerGuardiansOfTheRepositoryCSCD350\HolidayMailler\obj\Debug\AddContactWindow.g.cs
+E:\Documents\My Documents\College Assignments\CSCD350\Project\HolidayMailerGuardiansOfTheRepositoryCSCD350\HolidayMailler\bin\Debug\ContactData.dll
+E:\Documents\My Documents\College Assignments\CSCD350\Project\HolidayMailerGuardiansOfTheRepositoryCSCD350\HolidayMailler\bin\Debug\System.Data.SQLite.dll
