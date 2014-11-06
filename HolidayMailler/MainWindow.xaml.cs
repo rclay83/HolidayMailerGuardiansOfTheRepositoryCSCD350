@@ -3,12 +3,14 @@ using System.Windows;
 using ContactData;
 using System.Collections.Generic;
 using System.Data.SQLite;
+using Email;
+using System;
 
 /*  Holiday Mailer
  *  Guardians of the Repository
  * 
  *  Author: Marcus Sanchez
- *  Last revision:  11/4/2014
+ *  Last revision:  11/5/2014
  *  
  *  MainWindow class is the main GUI for the mail client.
  *  User interation with contact database and mail sending occurs here.
@@ -17,6 +19,7 @@ using System.Data.SQLite;
  *      Add mouse over messges
  *      Create Regex for new contact validation
  *      "How to use" option in Help
+ *      Check/uncheck all contacts
  */
 
 namespace HolidayMailler
@@ -45,11 +48,10 @@ namespace HolidayMailler
 
             if (toAdd.FirstName != null)
             {
-                this.contactList.Add(toAdd);                
-
                 try
                 {
                     this.contactsDB.addContact(toAdd);
+                    this.contactList.Add(toAdd);
                 }
                 catch (SQLiteException ex)
                 {
@@ -69,7 +71,7 @@ namespace HolidayMailler
         {
             this.selectedContacts.Add((Contact)this.contactsTable.SelectedItem);
             this.selectionCountLabel.Content = this.selectedContacts.Count + " contacts selected";
-            this.sendButton.IsEnabled = true;
+            this.composeButton.IsEnabled = true;
         }
 
         private void OnContactUnchecked (object sender, RoutedEventArgs e)
@@ -79,7 +81,8 @@ namespace HolidayMailler
 
             if (this.selectedContacts.Count == 0)
             {
-                this.sendButton.IsEnabled = false;
+                this.composeButton.IsEnabled = false;
+                this.mailTab.IsEnabled = false;
             }
         }
 
@@ -90,6 +93,55 @@ namespace HolidayMailler
             if (decision == MessageBoxResult.Yes)
             {
                 this.Close();
+            }
+        }
+
+        private void composeButton_Click (object sender, RoutedEventArgs e)
+        {
+            this.sendToField.Text = "";
+
+            foreach (Contact contact in this.selectedContacts)
+            {
+                this.sendToField.Text += contact.Email + ", ";
+            }
+
+            this.sendToField.Text = this.sendToField.Text.Substring(0, this.sendToField.Text.Length - 2);
+            this.subjectField.Text = "";
+            this.bodyField.Text = "";
+
+            this.tabs.SelectedIndex = 1;
+            this.mailTab.IsEnabled = true;
+        }
+
+        private void sendButton_Click (object sender, RoutedEventArgs e)
+        {
+            if (this.subjectField.Text.Length > 0 && this.bodyField.Text.Length > 0)
+            {
+                string[] recipients = new string[this.selectedContacts.Count];
+                int contactIndex = 0;
+
+                foreach (Contact contact in this.selectedContacts)
+                {
+                    recipients[contactIndex++] = contact.Email;
+                }
+
+                try
+                {
+                    MailMan mailman = new MailMan(recipients, this.subjectField.Text, this.bodyField.Text);
+                    mailman.sendMail();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("An error occured while attempting to send the message.");
+                }
+
+                MessageBox.Show("Message sent to " + this.selectedContacts.Count + " contacts.", "Success");
+                this.tabs.SelectedIndex = 0;
+                this.mailTab.IsEnabled = false;
+            }
+            else
+            {
+                this.errorLabel.Content = "A subject and body required";
             }
         }
     }

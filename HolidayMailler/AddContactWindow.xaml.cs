@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using ContactData;
+using System.Text.RegularExpressions;
 
 /*  Holiday Mailer
  *  Guardians of the Repository
@@ -27,14 +28,25 @@ namespace HolidayMailler
         private void addButton_Click (object sender, RoutedEventArgs e)
         {
             // just a temporary check, will add regex
-            if (this.firstNameField.Text.Length > 1 && this.lastNameField.Text.Length > 1 && this.emailField.Text.Length > 1)
+            if (this.firstNameField.Text.Length > 1 && this.lastNameField.Text.Length > 1)
             {
-                this.contact.FirstName = this.firstNameField.Text;
-                this.contact.LastName = this.lastNameField.Text;
-                this.contact.Email = this.emailField.Text;
-                this.contact.GotMail = (bool)this.mailCheckBox.IsChecked;
+                if (Regex.IsMatch(this.emailField.Text, @"^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$"))
+                {
+                    this.contact.FirstName = this.firstNameField.Text;
+                    this.contact.LastName = this.lastNameField.Text;
+                    this.contact.Email = this.emailField.Text;
+                    this.contact.GotMail = (bool)this.mailCheckBox.IsChecked;
 
-                this.Close();
+                    this.Close();
+                }
+                else
+                {
+                    this.errorMessageLabel.Content = "Invalid email";
+                }
+            }
+            else
+            {
+                this.errorMessageLabel.Content = "Please fill out all fields";
             }
         }
     }

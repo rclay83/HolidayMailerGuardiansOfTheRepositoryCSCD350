@@ -3,34 +3,55 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Mailer" Height="437" Width="684" WindowStartupLocation="CenterScreen">
     <Grid>
-        <DataGrid x:Name="contactsTable" Margin="21,50,23,65" ColumnWidth="*" AutoGenerateColumns="False">
-            <DataGrid.Columns>
-                <DataGridCheckBoxColumn Header="Send" Width="40">
-                    <DataGridCheckBoxColumn.CellStyle>
-                        <Style>
-                            <EventSetter Event="CheckBox.Checked" Handler="OnContactChecked"/>
-                            <EventSetter Event="CheckBox.Unchecked" Handler="OnContactUnchecked"/>
-                        </Style>
-                    </DataGridCheckBoxColumn.CellStyle>
-                </DataGridCheckBoxColumn>
-                <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}"></DataGridTextColumn>
-                <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Email Name" Binding="{Binding Email}"></DataGridTextColumn>
-            </DataGrid.Columns>
-        </DataGrid>
         <Menu Height="21" Margin="1,0,0,0" VerticalAlignment="Top">
             <MenuItem Name="fileMenu" Header="File">
                 <MenuItem Name="exitMenu" Header="Exit" Click="exitMenu_Click"/>
             </MenuItem>
             <MenuItem Name="contactMenu" Header="Contacts">
-                <MenuItem Name="addContactMenu" Header="Add New Contact" Click="addContactMenu_Click"/>
+                <MenuItem Name="addContactMenu" Header="Add New Contact" Click="addContactMenu_Click" InputGestureText="Ctrl+N"/>
             </MenuItem>
             <MenuItem Name="helpMenu" Header="Help">
                 <MenuItem Name="aboutMenu" Header="About" Click="aboutMenu_Click"/>
             </MenuItem>
         </Menu>
-        <Button x:Name="sendButton" Content="Send Mail" Margin="0,0,45,28" Height="21" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="87" IsEnabled="False"/>
-        <Label x:Name="selectionCountLabel" Content="0 Contacts Selected" HorizontalAlignment="Left" Height="30" Margin="33,0,0,21" VerticalAlignment="Bottom" Width="198"/>
+        <TabControl x:Name="tabs" Margin="1,26,0,0">
+            <TabItem x:Name="contactsTab" Header="Contacts" TabIndex="0">
+                <Grid Background="#FFE5E5E5">
+                    <DataGrid x:Name="contactsTable" Margin="21,19,23,56" ColumnWidth="*" AutoGenerateColumns="False" HeadersVisibility="Column">
+                        <DataGrid.Columns>
+                            <DataGridCheckBoxColumn Header="Send" Width="40" CanUserResize="False">
+                                <DataGridCheckBoxColumn.CellStyle>
+                                    <Style>
+                                        <EventSetter Event="CheckBox.Checked" Handler="OnContactChecked"/>
+                                        <EventSetter Event="CheckBox.Unchecked" Handler="OnContactUnchecked"/>
+                                    </Style>
+                                </DataGridCheckBoxColumn.CellStyle>
+                                
+                            </DataGridCheckBoxColumn>
+                            <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Email Name" Binding="{Binding Email}"></DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Button x:Name="composeButton" Content="Compose Mail" Margin="0,0,23,19" Height="21" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="87" IsEnabled="False" Click="composeButton_Click"/>
+                    <Label x:Name="selectionCountLabel" Content="0 Contacts Selected" HorizontalAlignment="Left" Height="30" Margin="21,0,0,10" VerticalAlignment="Bottom" Width="167"/>
+                </Grid>
+
+            </TabItem>
+            <TabItem x:Name="mailTab" Header="Mail" TabIndex="1" IsEnabled="False">
+                <Grid Background="#FFE5E5E5">
+                    <TextBox x:Name="bodyField" Margin="28,100,28,53" TextWrapping="Wrap"/>
+                    <Button x:Name="attatchButton" Content="Attatch" HorizontalAlignment="Left" Height="27" Margin="218,0,0,10" VerticalAlignment="Bottom" Width="96" RenderTransformOrigin="0.458,-0.409" IsEnabled="False"/>
+                    <Label Content="No attachments" HorizontalAlignment="Left" Height="27" Margin="28,0,0,10" VerticalAlignment="Bottom" Width="131"/>
+                    <TextBox x:Name="subjectField" Height="22" Margin="116,50,39,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                    <TextBox x:Name="sendToField" Height="22" Margin="116,14,39,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True"/>
+                    <Label Content="Send to:" HorizontalAlignment="Left" Height="31" Margin="26,14,0,0" VerticalAlignment="Top" Width="85"/>
+                    <Button x:Name="sendButton" Content="Send Mail" Height="27" Margin="0,0,28,10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="96" Click="sendButton_Click"/>
+                    <Label Content="Subject" HorizontalAlignment="Left" Height="31" Margin="26,50,0,0" VerticalAlignment="Top" Width="85"/>
+                    <Label x:Name="errorLabel" Content="" Margin="0,0,145,10" Foreground="#FFEA1616" HorizontalAlignment="Right" Width="176" Height="27" VerticalAlignment="Bottom" VerticalContentAlignment="Center"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
 
     </Grid>
 </Window>
