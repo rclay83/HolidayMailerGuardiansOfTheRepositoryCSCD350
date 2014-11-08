@@ -56,6 +56,23 @@ namespace ContactDataTest
            
         }
 
+            
+        [TestMethod]
+        public void TestAddContactWithMail()
+        {
+            IContactDao cdao = new ContactDao();
+            IContact toAdd = new Contact() 
+            { 
+                FirstName = "Peter", 
+                LastName = "Parker", 
+                Email = "spider@spidermail.com", 
+                GotMail = true };
+            cdao.addContact(toAdd);
+            IDictionary<string, IContact> allContacts = cdao.getAllContacts();
+            IContact contactReturned = allContacts[toAdd.Email];
+            Assert.AreEqual(toAdd, contactReturned);
+
+        }
         [TestMethod]
         public void TestAddContactWithoutLastName()
         {
@@ -95,6 +112,30 @@ namespace ContactDataTest
             IContact toAdd = new Contact() { LastName = "some name last", Email = "some email" };
             cdao.addContact(toAdd);
 
+        }
+
+        [TestMethod]
+        public void TestContactEqualsFalse()
+        {
+            Contact c1 = new Contact() { FirstName = "John", LastName = "Doe", Email = "john@testmail.com", GotMail = true };
+            Contact c2 = new Contact() { FirstName = "Jane", LastName = "Doe", Email = "john@testmail.com", GotMail = true };
+            Assert.AreNotEqual(c1, c2);
+        }
+
+        [TestMethod]
+        public void TestContactEquals()
+        {
+            Contact c1 = new Contact() { FirstName = "John", LastName = "Doe", Email = "john@testmail.com", GotMail = true };
+            Contact c2 = new Contact() { FirstName = "John", LastName = "Doe", Email = "john@testmail.com", GotMail = true };
+            Assert.AreEqual(c1, c2);
+        }
+
+        [TestMethod]
+        public void TestContactEqualsNull()
+        {
+            Contact c1 = new Contact() { FirstName = "John", LastName = "Doe", Email = "john@testmail.com", GotMail = true };
+            Contact c2 = null;
+            Assert.AreNotEqual(c1, c2);
         }
     }
 }
