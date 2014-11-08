@@ -10,7 +10,7 @@ using System;
  *  Guardians of the Repository
  * 
  *  Author: Marcus Sanchez
- *  Last revision:  11/5/2014
+ *  Last revision:  11/7/2014
  *  
  *  MainWindow class is the main GUI for the mail client.
  *  User interation with contact database and mail sending occurs here.
@@ -52,13 +52,12 @@ namespace HolidayMailler
                 {
                     this.contactsDB.addContact(toAdd);
                     this.contactList.Add(toAdd);
+                    this.contactsTable.Items.Refresh();
                 }
                 catch (SQLiteException ex)
                 {
                     MessageBox.Show("There is already a contact in the databse with that email.");
                 }
-
-                this.contactsTable.Items.Refresh();
             }
         }
 
@@ -72,6 +71,8 @@ namespace HolidayMailler
             this.selectedContacts.Add((Contact)this.contactsTable.SelectedItem);
             this.selectionCountLabel.Content = this.selectedContacts.Count + " contacts selected";
             this.composeButton.IsEnabled = true;
+
+            UpdateRecipientField();
         }
 
         private void OnContactUnchecked (object sender, RoutedEventArgs e)
@@ -84,6 +85,8 @@ namespace HolidayMailler
                 this.composeButton.IsEnabled = false;
                 this.mailTab.IsEnabled = false;
             }
+
+            UpdateRecipientField();
         }
 
         private void exitMenu_Click (object sender, RoutedEventArgs e)
@@ -96,7 +99,7 @@ namespace HolidayMailler
             }
         }
 
-        private void composeButton_Click (object sender, RoutedEventArgs e)
+        private void UpdateRecipientField ()
         {
             this.sendToField.Text = "";
 
@@ -104,8 +107,11 @@ namespace HolidayMailler
             {
                 this.sendToField.Text += contact.Email + ", ";
             }
-
             this.sendToField.Text = this.sendToField.Text.Substring(0, this.sendToField.Text.Length - 2);
+        }
+
+        private void composeButton_Click (object sender, RoutedEventArgs e)
+        {
             this.subjectField.Text = "";
             this.bodyField.Text = "";
 
@@ -141,7 +147,7 @@ namespace HolidayMailler
             }
             else
             {
-                this.errorLabel.Content = "A subject and body required";
+                this.errorLabel.Content = "A subject and body are required";
             }
         }
     }

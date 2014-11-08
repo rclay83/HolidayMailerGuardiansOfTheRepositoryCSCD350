@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
  *  Guardians of the Repository
  * 
  *  Author: Marcus Sanchez
- *  Last revision:  11/4/2014
+ *  Last revision:  11/7/2014
  *  
  *  AddContactWindow is responsible for prompting the user for new contact information.
  *  
@@ -24,11 +24,9 @@ namespace HolidayMailler
             this.contact = newContact;
         }
 
-        // to do: regex for email, first name, last name
         private void addButton_Click (object sender, RoutedEventArgs e)
         {
-            // just a temporary check, will add regex
-            if (this.firstNameField.Text.Length > 1 && this.lastNameField.Text.Length > 1)
+            if (Regex.IsMatch(this.firstNameField.Text, @"^[a-zA-Z]*$") && Regex.IsMatch(this.lastNameField.Text, @"^[a-zA-Z]*$"))
             {
                 if (Regex.IsMatch(this.emailField.Text, @"^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$"))
                 {
@@ -46,7 +44,7 @@ namespace HolidayMailler
             }
             else
             {
-                this.errorMessageLabel.Content = "Please fill out all fields";
+                this.errorMessageLabel.Content = "Invalid first name or last name";
             }
         }
     }
