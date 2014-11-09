@@ -62,6 +62,7 @@ namespace ContactData
                         {
                             contactToAdd.LastName = (string)dataReader["last_name"];
                         }
+                        contactToAdd.GotMail = (bool)dataReader["got_mail"];
                         map.Add(contactToAdd.Email, contactToAdd);
                     }
                     

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ContactData
 {
-    public class Contact:IContact
+    public class Contact : IContact
     {
         private string _email;
         private string _lastName;
@@ -42,6 +42,25 @@ namespace ContactData
         {
             get { return this._gotMail; }
             set { this._gotMail = value; }
+        }
+
+        public override bool Equals(object obj)
+        {
+            Contact that = obj as Contact;
+            if (obj == null)
+            {
+                return false;
+            }
+
+            return that.FirstName == this.FirstName &&
+                that.LastName == this.LastName &&
+                that.GotMail == this.GotMail &&
+            that.Email == this.Email;
+        }
+
+        public override int GetHashCode()
+        {
+            return (FirstName == null ? 17 : FirstName.GetHashCode()) ^ (Email == null ? 17 : Email.GetHashCode());
         }
     }
 }
