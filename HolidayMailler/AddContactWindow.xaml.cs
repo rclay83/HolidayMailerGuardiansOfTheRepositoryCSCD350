@@ -1,12 +1,13 @@
 ﻿using System.Windows;
 using ContactData;
 using System.Text.RegularExpressions;
+using System.Windows.Input;
 
 /*  Holiday Mailer
  *  Guardians of the Repository
  * 
  *  Author: Marcus Sanchez
- *  Last revision:  11/7/2014
+ *  Last revision:  11/8/2014
  *  
  *  AddContactWindow is responsible for prompting the user for new contact information.
  *  
@@ -45,6 +46,14 @@ namespace HolidayMailler
             else
             {
                 this.errorMessageLabel.Content = "Invalid first name or last name";
+            }
+        }
+
+        private void fieldKeyDown (object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                addButton_Click(sender, e);
             }
         }
     }

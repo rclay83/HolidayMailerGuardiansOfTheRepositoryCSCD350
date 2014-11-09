@@ -5,19 +5,20 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 using Email;
 using System;
+using Microsoft.Win32;
+using System.Windows.Input;
 
 /*  Holiday Mailer
  *  Guardians of the Repository
  * 
  *  Author: Marcus Sanchez
- *  Last revision:  11/7/2014
+ *  Last revision:  11/8/2014
  *  
  *  MainWindow class is the main GUI for the mail client.
  *  User interation with contact database and mail sending occurs here.
  *  
  *  To do:
  *      Add mouse over messges
- *      Create Regex for new contact validation
  *      "How to use" option in Help
  *      Check/uncheck all contacts
  */
@@ -85,18 +86,15 @@ namespace HolidayMailler
                 this.composeButton.IsEnabled = false;
                 this.mailTab.IsEnabled = false;
             }
-
-            UpdateRecipientField();
+            else
+            {
+                UpdateRecipientField();
+            }
         }
 
         private void exitMenu_Click (object sender, RoutedEventArgs e)
         {
-            var decision = MessageBox.Show("Are you sure you want to exit?", "Confirm", MessageBoxButton.YesNo);
-
-            if (decision == MessageBoxResult.Yes)
-            {
-                this.Close();
-            }
+            this.Close();
         }
 
         private void UpdateRecipientField ()
@@ -149,6 +147,59 @@ namespace HolidayMailler
             {
                 this.errorLabel.Content = "A subject and body are required";
             }
+        }
+        // To Do:   Send the file to mail object, currently does nothing with file
+        private void attatchButton_Click (object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openWindow = new OpenFileDialog();
+            var result = openWindow.ShowDialog();
+
+            if (result == true)
+            {
+                this.attatchmentLabel.Content = "File attatched";
+            }
+            else
+            {
+                this.attatchmentLabel.Content = "No attatchments";
+            }
+        }
+
+        private void searchCriteriaField_KeyDown (object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+
+            }
+        }
+
+        private void viewAllMenu_Click (object sender, RoutedEventArgs e)
+        {
+            this.contactsTable.ItemsSource = this.contactList;
+        }
+
+        private void Window_KeyDown (object sender, KeyEventArgs e)
+        {
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) && Keyboard.IsKeyDown(Key.N))
+            {
+                addContactMenu_Click(sender, e);
+            }
+
+            else if (Keyboard.IsKeyDown(Key.LeftCtrl) && Keyboard.IsKeyDown(Key.A))
+            {
+                viewAllMenu_Click(sender, e);
+            }
+
+            else if (Keyboard.IsKeyDown(Key.LeftAlt) && Keyboard.IsKeyDown(Key.A))
+            {
+                aboutMenu_Click(sender, e);
+            }
+        }
+
+        private void Window_Closing (object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var decision = MessageBox.Show("Are you sure you want to exit?", "Confirm", MessageBoxButton.YesNo);
+
+            e.Cancel = (MessageBoxResult.No == decision);
         }
     }
 }
