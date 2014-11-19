@@ -2,55 +2,46 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
+using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Email
 {
-    public class MailMan
+    public class MailMan : I_MailMan
     {
         private string[] _recipients;
         private string _subject;
         private string _body;
 
-        private string _username;
-        private string _password;
-        private string _sender;
+        private Account _account;
+        private MailMessage _mail;
 
-        private string _smtpServer;
-
-        public MailMan(string[] Recipients, string Subject, string Body)
+        public MailMan(Account account, string[] Recipients, string Subject, string Body)
         {
             _recipients = Recipients;
             _subject    = Subject;
             _body       = Body;
-            setSMTPserver("smtp.gmail.com");
-            setSender("guardiansoftherepository@gmail.com");
-            setPassword("supersecurepassword");
-            setUsername("guardiansoftherepository@gmail.com");
+            _account    = account;
+            _mail = new MailMessage();
         }
 
         public void sendMail() 
         {
             try
-            {
-                MailMessage mail = new MailMessage();
-                SmtpClient SmtpServer = new SmtpClient(_smtpServer);
+            {         
+                SmtpClient SmtpServer = _account.getSMTPClient();
 
-                mail.From = new MailAddress(_sender);
+                _mail.From = new MailAddress(_account.getSender());
                 foreach (string recipient in _recipients)
                 {
-                    mail.To.Add(recipient);
+                    _mail.To.Add(recipient);
                 }
 
-                mail.Subject = _subject;
-                mail.Body    = _body;
+                _mail.Subject = _subject;
+                _mail.Body    = _body;
 
-                SmtpServer.Port = 587;
-                SmtpServer.Credentials = new System.Net.NetworkCredential(_username, _password);
-                SmtpServer.EnableSsl = true;
-
-                SmtpServer.Send(mail);
+                SmtpServer.Send(_mail);
             }
             catch (Exception ex)
             {
@@ -58,32 +49,21 @@ namespace Email
             }
         }
 
-        public void setSender(string sender)
+        public void setAttachment(string[] files)
         {
-            if (sender == null)
-                throw new Exception("sender can't be null");
-            _sender = sender;
-        }
+            foreach (string file in files)
+            {
+                Attachment data = new Attachment(file, MediaTypeNames.Application.Octet);
 
-        public void setPassword(string password)
-        {
-            if (password == null)
-                throw new Exception("password can't be null");
-            _password = password;
-        }
+                // Add time stamp information for the file.
+                ContentDisposition disposition = data.ContentDisposition;
+                disposition.CreationDate = System.IO.File.GetCreationTime(file);
+                disposition.ModificationDate = System.IO.File.GetLastWriteTime(file);
+                disposition.ReadDate = System.IO.File.GetLastAccessTime(file);
+                // Add the file attachment to this e-mail message.
 
-        public void setUsername(string username)
-        {
-            if (username == null)
-                throw new Exception("username can't be null");
-            _username = username;
-        }
-
-        public void setSMTPserver(string smtpServer)
-        {
-            if (smtpServer == null)
-                throw new Exception("smtp server can't be null");
-            _smtpServer = smtpServer;
+                _mail.Attachments.Add(data);
+            }
         }
     }
 }
