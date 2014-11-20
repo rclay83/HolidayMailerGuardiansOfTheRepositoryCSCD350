@@ -18,7 +18,7 @@
         <TabControl x:Name="tabs" Margin="1,26,0,0">
             <TabItem x:Name="contactsTab" Header="Contacts" TabIndex="0">
                 <Grid Background="#FFE5E5E5">
-                    <DataGrid x:Name="contactsTable" Margin="21,10,23,76" ColumnWidth="*" AutoGenerateColumns="False" HeadersVisibility="Column">
+                    <DataGrid x:Name="contactsTable" Margin="21,10,23,39" ColumnWidth="*" AutoGenerateColumns="False" HeadersVisibility="Column">
                         <DataGrid.Columns>
                             <DataGridCheckBoxColumn Header="Send" Width="40" CanUserResize="False" CanUserSort="False">
                                 <DataGridCheckBoxColumn.CellStyle>
@@ -37,32 +37,59 @@
                     </DataGrid>
                     <Button x:Name="composeButton" Content="Compose Mail" Margin="0,0,23,7" Height="21" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="87" IsEnabled="False" Click="composeButton_Click" ToolTipService.ShowOnDisabled="True" ToolTip="One or more contacts must be selected to send mail."/>
                     <Label x:Name="selectionCountLabel" Content="0 Contacts Selected" HorizontalAlignment="Left" Height="30" Margin="21,0,0,0" VerticalAlignment="Bottom" Width="126"/>
-                    <TextBox x:Name="searchCriteriaField" HorizontalAlignment="Left" Height="22" Margin="293,0,0,44" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="139" KeyDown="searchCriteriaField_KeyDown"/>
-                    <Label Content="Search" HorizontalAlignment="Left" Height="27" Margin="21,0,0,39" VerticalAlignment="Bottom" Width="67"/>
-                    <ComboBox x:Name="fieldComboBox" HorizontalAlignment="Left" Height="22" Margin="88,0,0,44" VerticalAlignment="Bottom" Width="89" SelectedIndex="0">
-                        <ComboBoxItem Content="Last Name"/>
-                        <ComboBoxItem Content="First Name"/>
-                        <ComboBoxItem Content="Email"/>
-                    </ComboBox>
-                    <ComboBox x:Name="criteriaComboBox" HorizontalAlignment="Left" Height="22" Margin="189,0,0,44" VerticalAlignment="Bottom" Width="89" SelectedIndex="0">
-                        <ComboBoxItem Content="Contains"/>
-                        <ComboBoxItem Content="Begins with"/>
-                    </ComboBox>
                     <Label x:Name="searchResultsLabel" Content="" HorizontalAlignment="Left" Height="30" Margin="451,0,0,39" VerticalAlignment="Bottom" Width="126"/>
                 </Grid>
 
             </TabItem>
-            <TabItem x:Name="mailTab" Header="Mail" TabIndex="1" IsEnabled="False">
+            <TabItem x:Name="searchTab" Header="Search" TabIndex="1">
                 <Grid Background="#FFE5E5E5">
-                    <TextBox x:Name="bodyField" Margin="28,100,28,53" TextWrapping="Wrap"/>
-                    <Button x:Name="attatchButton" Content="Attatch" HorizontalAlignment="Left" Height="27" Margin="218,0,0,10" VerticalAlignment="Bottom" Width="96" RenderTransformOrigin="0.458,-0.409" Click="attatchButton_Click"/>
-                    <Label x:Name="attatchmentLabel" Content="No attachments" HorizontalAlignment="Left" Height="27" Margin="28,0,0,10" VerticalAlignment="Bottom" Width="131"/>
-                    <TextBox x:Name="subjectField" Height="22" Margin="116,50,39,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
-                    <TextBox x:Name="sendToField" Height="22" Margin="116,14,39,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True"/>
+                    <DataGrid Margin="21,63,23,39" ColumnWidth="*" AutoGenerateColumns="False" HeadersVisibility="Column">
+                        <DataGrid.Columns>
+                            <DataGridCheckBoxColumn Header="Send" Width="40" CanUserResize="False" CanUserSort="False">
+                                <DataGridCheckBoxColumn.CellStyle>
+                                    <Style>
+                                        <EventSetter Event="CheckBox.Checked" Handler="OnContactChecked"/>
+                                        <EventSetter Event="CheckBox.Unchecked" Handler="OnContactUnchecked"/>
+                                    </Style>
+                                </DataGridCheckBoxColumn.CellStyle>
+
+                            </DataGridCheckBoxColumn>
+                            <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Email Address" Binding="{Binding Email}"></DataGridTextColumn>
+                            <DataGridCheckBoxColumn Header="Received" Binding="{Binding GotMail}" Width="60" CanUserResize="False" IsReadOnly="True"></DataGridCheckBoxColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Label Content="0 Contacts Selected" HorizontalAlignment="Left" Height="30" Margin="21,0,0,0" VerticalAlignment="Bottom" Width="126"/>
+                    <Label Content="" HorizontalAlignment="Left" Height="30" Margin="451,0,0,39" VerticalAlignment="Bottom" Width="126"/>
+                    <TextBox HorizontalAlignment="Left" Height="22" Margin="295,20,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="139"/>
+                    <Label Content="Search" HorizontalAlignment="Left" Height="27" Margin="23,20,0,0" VerticalAlignment="Top" Width="67"/>
+                    <ComboBox HorizontalAlignment="Left" Height="22" Margin="90,20,0,0" VerticalAlignment="Top" Width="89" SelectedIndex="0">
+                        <ComboBoxItem Content="Last Name"/>
+                        <ComboBoxItem Content="First Name"/>
+                        <ComboBoxItem Content="Email"/>
+                    </ComboBox>
+                    <ComboBox HorizontalAlignment="Left" Height="22" Margin="191,20,0,0" VerticalAlignment="Top" Width="89" SelectedIndex="0">
+                        <ComboBoxItem Content="Contains"/>
+                        <ComboBoxItem Content="Begins with"/>
+                    </ComboBox>
+                    <Button Content="Search" Height="22" Margin="486,20,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="91"/>
+                    <Button x:Name="searchComposeButton" Content="Compose Mail" Margin="0,0,23,7" Height="21" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="87" IsEnabled="False" Click="composeButton_Click" ToolTipService.ShowOnDisabled="True" ToolTip="One or more contacts must be selected to send mail."/>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="mailTab" Header="Mail" TabIndex="2">
+                <Grid Background="#FFE5E5E5">
+                    <TextBox x:Name="bodyField" Margin="28,115,241,53" TextWrapping="Wrap"/>
+                    <Button x:Name="attatchButton" Content="Attatch" HorizontalAlignment="Right" Height="27" Margin="0,0,28,10" VerticalAlignment="Bottom" Width="96" RenderTransformOrigin="0.458,-0.409" Click="attatchButton_Click"/>
+                    <TextBox x:Name="subjectField" Height="22" Margin="116,50,28,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                    <TextBox x:Name="sendToField" Height="22" Margin="116,14,28,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True"/>
                     <Label Content="Send to:" HorizontalAlignment="Left" Height="31" Margin="26,14,0,0" VerticalAlignment="Top" Width="85"/>
-                    <Button x:Name="sendButton" Content="Send Mail" Height="27" Margin="0,0,28,10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="96" Click="sendButton_Click"/>
+                    <Button x:Name="sendButton" Content="Send Mail" Height="27" Margin="0,0,241,10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="96" Click="sendButton_Click"/>
                     <Label Content="Subject" HorizontalAlignment="Left" Height="31" Margin="26,50,0,0" VerticalAlignment="Top" Width="85"/>
-                    <Label x:Name="errorLabel" Content="" Margin="0,0,145,10" Foreground="#FFEA1616" HorizontalAlignment="Right" Width="176" Height="27" VerticalAlignment="Bottom" VerticalContentAlignment="Center"/>
+                    <Label x:Name="errorLabel" Content="" Margin="0,0,357,10" Foreground="#FFEA1616" HorizontalAlignment="Right" Width="280" Height="27" VerticalAlignment="Bottom" VerticalContentAlignment="Center"/>
+                    <Label Content="Body" HorizontalAlignment="Left" Height="24" Margin="26,83,0,0" VerticalAlignment="Top" Width="102"/>
+                    <ListBox x:Name="attachmentsListBox" HorizontalAlignment="Right" Margin="0,115,28,53" Width="176"/>
+                    <Label x:Name="attachmentLabel" Content="No attachments" HorizontalAlignment="Right" Height="27" Margin="0,83,73,0" VerticalAlignment="Top" Width="131"/>
                 </Grid>
             </TabItem>
         </TabControl>

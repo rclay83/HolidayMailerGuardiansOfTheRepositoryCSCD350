@@ -12,15 +12,10 @@ using System.Windows.Input;
  *  Guardians of the Repository
  * 
  *  Author: Marcus Sanchez
- *  Last revision:  11/8/2014
+ *  Last revision:  11/19/2014
  *  
  *  MainWindow class is the main GUI for the mail client.
  *  User interation with contact database and mail sending occurs here.
- *  
- *  To do:
- *      Add mouse over messges
- *      "How to use" option in Help
- *      Check/uncheck all contacts
  */
 
 namespace HolidayMailler
@@ -32,6 +27,10 @@ namespace HolidayMailler
         private List<IContact> contactList;
         private List<IContact> selectedContacts;
 
+        private Account sender;
+        private MailMan message;
+        private List<string> attachments;
+
         public MainWindow ()
         {
             InitializeComponent();
@@ -39,6 +38,9 @@ namespace HolidayMailler
             this.contactList = this.contactsDB.getAllContacts().Values.ToList();
             this.selectedContacts = new List<IContact>();
             this.contactsTable.ItemsSource = contactList;
+            this.sender = new Account();
+
+            this.attachments = new List<string>();
         }
 
         private void addContactMenu_Click (object sender, RoutedEventArgs e)
@@ -81,15 +83,8 @@ namespace HolidayMailler
             this.selectedContacts.Remove((Contact)this.contactsTable.SelectedItem);
             this.selectionCountLabel.Content = this.selectedContacts.Count + " contacts selected";
 
-            if (this.selectedContacts.Count == 0)
-            {
-                this.composeButton.IsEnabled = false;
-                this.mailTab.IsEnabled = false;
-            }
-            else
-            {
-                UpdateRecipientField();
-            }
+            UpdateRecipientField();
+
         }
 
         private void exitMenu_Click (object sender, RoutedEventArgs e)
@@ -101,20 +96,20 @@ namespace HolidayMailler
         {
             this.sendToField.Text = "";
 
-            foreach (Contact contact in this.selectedContacts)
+            if (this.selectedContacts.Count > 0)
             {
-                this.sendToField.Text += contact.Email + ", ";
+                foreach (Contact contact in this.selectedContacts)
+                {
+                    this.sendToField.Text += contact.Email + ", ";
+                }
+
+                this.sendToField.Text = this.sendToField.Text.Substring(0, this.sendToField.Text.Length - 2);
             }
-            this.sendToField.Text = this.sendToField.Text.Substring(0, this.sendToField.Text.Length - 2);
         }
 
         private void composeButton_Click (object sender, RoutedEventArgs e)
         {
-            this.subjectField.Text = "";
-            this.bodyField.Text = "";
-
-            this.tabs.SelectedIndex = 1;
-            this.mailTab.IsEnabled = true;
+            this.tabs.SelectedIndex = 2;
         }
 
         private void sendButton_Click (object sender, RoutedEventArgs e)
@@ -131,8 +126,14 @@ namespace HolidayMailler
 
                 try
                 {
-                    MailMan mailman = new MailMan(recipients, this.subjectField.Text, this.bodyField.Text);
-                    mailman.sendMail();
+                    this.message = new MailMan(this.sender, recipients, this.subjectField.Text, this.bodyField.Text);
+
+                    if (this.attachments.Count > 0)
+                    {
+                        this.message.setAttachment(this.attachments.ToArray());
+                    }
+
+                    this.message.sendMail();
                 }
                 catch (Exception ex)
                 {
@@ -140,15 +141,33 @@ namespace HolidayMailler
                 }
 
                 MessageBox.Show("Message sent to " + this.selectedContacts.Count + " contacts.", "Success");
+
+                CleanMail();
                 this.tabs.SelectedIndex = 0;
-                this.mailTab.IsEnabled = false;
             }
             else
             {
-                this.errorLabel.Content = "A subject and body are required";
+                if (this.selectedContacts.Count == 0)
+                {
+                    this.errorLabel.Content = "Contacts must be selected before sending";
+                }
+                else
+                {
+                    this.errorLabel.Content = "A subject and body are required";
+                }
             }
         }
-        // To Do:   Send the file to mail object, currently does nothing with file
+
+        private void CleanMail ()
+        {
+            this.attachments.Clear();
+            this.attachmentsListBox.ItemsSource = this.attachments;
+            this.subjectField.Text = "";
+            this.bodyField.Text = "";
+            this.errorLabel.Content = "";
+            this.attachmentLabel.Content = "No attachments";
+        }
+
         private void attatchButton_Click (object sender, RoutedEventArgs e)
         {
             OpenFileDialog openWindow = new OpenFileDialog();
@@ -156,25 +175,16 @@ namespace HolidayMailler
 
             if (result == true)
             {
-                this.attatchmentLabel.Content = "File attatched";
-            }
-            else
-            {
-                this.attatchmentLabel.Content = "No attatchments";
-            }
-        }
-
-        private void searchCriteriaField_KeyDown (object sender, System.Windows.Input.KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-
+                this.attachmentLabel.Content = "File attatched";
+                this.attachments.Add(openWindow.FileName);
+                this.attachmentsListBox.ItemsSource = this.attachments;
+                this.attachmentLabel.Content = this.attachments.Count + " attchments";
             }
         }
 
         private void viewAllMenu_Click (object sender, RoutedEventArgs e)
         {
-            this.contactsTable.ItemsSource = this.contactList;
+            this.tabs.SelectedIndex = 0;
         }
 
         private void Window_KeyDown (object sender, KeyEventArgs e)
