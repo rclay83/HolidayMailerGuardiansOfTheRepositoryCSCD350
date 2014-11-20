@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Email
 {
-    public class Account : I_Account
+    class Account : I_Account
     {
         private string _username;
         private string _password;
@@ -16,111 +16,101 @@ namespace Email
         private int _port;
         private bool _enableSSL;
 
+        public string Username
+        {
+            get
+            {
+                if (_username == null)
+                    throw new ArgumentNullException("Username can't be null.");
+                return _username;
+            }
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException("Username can't be null.");
+                _username = value;
+            }
+        }
+        public string Password
+        {
+            get
+            {
+                if (_password == null)
+                    throw new ArgumentNullException("Password can't be null");
+                return _password;
+            }
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException("Password can't be null");
+                _password = value;
+            }
+        }
+
+        public string Sender
+        {
+            get
+            {
+                if (_sender == null)
+                    throw new ArgumentNullException("Sender can't be null.");
+                return _sender;
+            }
+
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException("Sender can't be null.");
+                _sender = value;
+            }
+        }
+
+        public string SmtpServer
+        {
+            get
+            {
+                if (_smtpServer == null)
+                    throw new ArgumentNullException("SMTP server can't be null.");
+                return _smtpServer;
+            }
+
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException("SMTP server can't be null.");
+                _smtpServer = value;
+            }
+        }
+        public int Port
+        {
+            get
+            {
+                if (_port == 0)
+                    throw new ArgumentNullException("Port can't be null.");
+                return _port;
+            }
+
+            set
+            {
+                if (value == 0)
+                    throw new ArgumentNullException("Port can't be null.");
+                _port = value;
+            }
+        }
+        public bool SSL
+        {
+            get
+            {
+                return _enableSSL;
+            }
+            set
+            {
+                _enableSSL = value;
+            }
+        }
+
         public Account()
         {
-            setSMTPserver("smtp.gmail.com");
-            setSender("guardiansoftherepository@gmail.com");
-            setPassword("supersecurepassword");
-            setUsername("guardiansoftherepository@gmail.com");
+
         }
-
-        public SmtpClient getSMTPClient()
-        {
-            SmtpClient SmtpServer = new SmtpClient(getSMTPServer());
-
-            SmtpServer.Port = getPort();
-            SmtpServer.Credentials = new System.Net.NetworkCredential(getUsername(), getPassword());
-            SmtpServer.EnableSsl = _enableSSL;
-
-            return SmtpServer;
-        }
-
-        /**
-         * 
-         * Getters
-         * 
-         **/
-
-        public string getSender()
-        {
-            if (_sender == null)
-                throw new Exception("Sender is null");
-            return _sender;
-        }
-
-        private int getPort()
-        {
-            if (_port == null)
-                throw new Exception("Port is null");
-            return _port;
-        }
-
-        private string getSMTPServer()
-        {
-            if (_smtpServer == null)
-                throw new Exception("SMTP is null");
-            return _smtpServer;
-        }
-
-        private string getPassword()
-        {
-            if (_password == null)
-                throw new Exception("Password is null");
-            return _password;
-        }
-
-        private string getUsername()
-        {
-            if (_username == null)
-                throw new Exception("Username is null");
-            return _username;
-        }
-
-        /**
-         * 
-         * Setters
-         * 
-         **/
-
-        public void setSender(string sender)
-        {
-            if (sender == null)
-                throw new Exception("sender can't be null");
-            _sender = sender;
-        }
-
-        public void setPassword(string password)
-        {
-            if (password == null)
-                throw new Exception("password can't be null");
-            _password = password;
-        }
-
-        public void setUsername(string username)
-        {
-            if (username == null)
-                throw new Exception("username can't be null");
-            _username = username;
-        }
-
-        public void setSMTPserver(string smtpServer)
-        {
-            if (smtpServer == null)
-                throw new Exception("smtp server can't be null");
-            _smtpServer = smtpServer;
-        }
-
-        public void setPort(int port)
-        {
-            if (_port == null)
-                throw new Exception("port can't be null");
-            _port = port;
-        }
-
-        public void setSSL(bool enabled)
-        {
-            _enableSSL = enabled;
-        }
-
     }
 }
