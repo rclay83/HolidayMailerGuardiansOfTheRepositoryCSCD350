@@ -145,11 +145,10 @@ namespace ContactData
                     return true;
 
                 }
-                //catch
-                //{
-                //todo: throw custom exception here
-                //    return false; 
-                //}
+                catch(SQLiteException ex)
+                {
+                    throw new ContactDataExcpetion("Unexpected SQLException: " + ex.Message);
+                }
                 finally
                 {
                     connection.Close();
@@ -158,10 +157,45 @@ namespace ContactData
             }
         }
 
-
+        /**
+         * Remove contact from Contact table where email matches
+         * */
         public bool removeContact(IContact toRemove)
         {
-            throw new NotImplementedException();
+            if (null == toRemove.FirstName || null == toRemove.Email)
+            {
+                throw new ContactDataExcpetion("Missing required table field");
+            }
+            if (0 == toRemove.FirstName.Length || 0 == toRemove.Email.Length)
+            {
+                throw new ContactDataExcpetion("Missing required table field");
+            }
+            using (IDbCommand command = connection.CreateCommand())
+            {
+                try
+                {
+                    string commandText = "DELETE FROM AllContacts " +
+                        "WHERE email = @email;";
+
+                    command.CommandText = commandText;
+
+                    command.Parameters.Add(new SQLiteParameter("@email") { Value = toRemove.Email });
+
+                    verifyTable(this.connection);
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                    return true;
+                }
+                catch (SQLiteException ex)
+                {
+                    throw new ContactDataExcpetion("Unexpected SQLException: " + ex.Message);
+                }
+                finally
+                {
+                    connection.Close();
+                }
+                
+            }
         }
 
         public bool updateContact(IContact toUpdate)
