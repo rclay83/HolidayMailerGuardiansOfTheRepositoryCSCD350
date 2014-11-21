@@ -3,10 +3,11 @@ using System.Windows;
 using ContactData;
 using System.Collections.Generic;
 using System.Data.SQLite;
-using Email;
 using System;
 using Microsoft.Win32;
 using System.Windows.Input;
+using Email;
+using System.Reflection;
 
 /*  Holiday Mailer
  *  Guardians of the Repository
@@ -27,8 +28,8 @@ namespace HolidayMailler
         private List<IContact> contactList;
         private List<IContact> selectedContacts;
 
-        private Account sender;
-        private MailMan message;
+        //private Account sender;
+        //private MailMan message;
         private List<string> attachments;
 
         public MainWindow ()
@@ -38,7 +39,7 @@ namespace HolidayMailler
             this.contactList = this.contactsDB.getAllContacts().Values.ToList();
             this.selectedContacts = new List<IContact>();
             this.contactsTable.ItemsSource = contactList;
-            this.sender = new Account();
+            //this.sender = new Account();
 
             this.attachments = new List<string>();
         }
@@ -126,14 +127,14 @@ namespace HolidayMailler
 
                 try
                 {
-                    this.message = new MailMan(this.sender, recipients, this.subjectField.Text, this.bodyField.Text);
+                    //this.message = new MailMan(this.sender, recipients, this.subjectField.Text, this.bodyField.Text);
 
                     if (this.attachments.Count > 0)
                     {
-                        this.message.setAttachment(this.attachments.ToArray());
+                        //    this.message.setAttachment(this.attachments.ToArray());
                     }
 
-                    this.message.sendMail();
+                    //this.message.sendMail();
                 }
                 catch (Exception ex)
                 {
@@ -210,6 +211,48 @@ namespace HolidayMailler
             var decision = MessageBox.Show("Are you sure you want to exit?", "Confirm", MessageBoxButton.YesNo);
 
             e.Cancel = (MessageBoxResult.No == decision);
+        }
+
+        delegate bool SearchConstraint (string data, string searchText);
+
+        private void searchButton_Click (object sender, RoutedEventArgs e)
+        {
+            if (this.searchText.Text.Length == 0)
+            {
+                this.resultsTable.ItemsSource = this.contactList;
+            }
+            else
+            {
+                string searchText = this.searchText.Text.ToLower();
+                SearchConstraint search;
+
+                if (this.constraintBox.SelectedIndex == 0)
+                    search = ((data, text) => data.Contains(text));
+                else
+                    search = ((data, text) => data.StartsWith(text));
+                
+
+                string propertyText = this.fieldBox.SelectionBoxItem.ToString().Replace(" ", "");
+
+                var contactProperties = typeof(Contact).GetProperties().Where(prop => prop.Name == propertyText && prop.PropertyType == typeof(string) && prop.CanRead);
+
+                var results = this.contactList.Where(contact =>
+                {
+                    foreach (PropertyInfo prop in contactProperties)
+                    {
+                        string data = (string)prop.GetValue(contact);
+
+                        if (data != null && search(data.ToLower(), searchText))
+                        {
+                            return true;
+                        }
+                    }
+                    return false;
+                });
+
+                List<IContact> contactResults = results.ToList();
+                this.resultsTable.ItemsSource = contactResults;
+            }
         }
     }
 }
