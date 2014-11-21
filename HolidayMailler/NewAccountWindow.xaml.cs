@@ -1,27 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Email;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace HolidayMailler
 {
-    /// <summary>
-    /// Interaction logic for NewAccountWindow.xaml
-    /// </summary>
     public partial class NewAccountWindow : Window
     {
-        public NewAccountWindow ()
+        private I_Account account;
+
+        public NewAccountWindow (I_Account account)
         {
             InitializeComponent();
+        }
+
+        private void addButton_Click (object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

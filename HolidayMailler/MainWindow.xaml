@@ -7,8 +7,13 @@
             <MenuItem Name="fileMenu" Header="File">
                 <MenuItem Name="exitMenu" Header="Exit" Click="exitMenu_Click" InputGestureText="Alt+F4"/>
             </MenuItem>
+            <MenuItem Name="accountMenu" Header="Accounts">
+                <MenuItem Name="newAccountMenu" Header="Add Account" Click="newAccountMenu_Click"/>
+                <MenuItem Name="changeAccountMenu" Header="Change Account"/>
+            </MenuItem>
             <MenuItem Name="contactMenu" Header="Contacts">
                 <MenuItem Name="addContactMenu" Header="Add New Contact" Click="addContactMenu_Click" InputGestureText="Ctrl+N"/>
+                <MenuItem Name="removeContactMenu" Header="Remove selected" IsEnabled="False" Click="removeContactMenu_Click"/>
                 <MenuItem Name="viewAllMenu" Header="View All" Click="viewAllMenu_Click" InputGestureText="Ctrl+A"/>
             </MenuItem>
             <MenuItem Name="helpMenu" Header="Help">
@@ -62,7 +67,7 @@
                     </DataGrid>
                     <Label x:Name="resultsLabel" Content="0 Contacts Selected" HorizontalAlignment="Left" Height="30" Margin="21,0,0,0" VerticalAlignment="Bottom" Width="126"/>
                     <Label Content="" HorizontalAlignment="Left" Height="30" Margin="451,0,0,39" VerticalAlignment="Bottom" Width="126"/>
-                    <TextBox x:Name="searchText" HorizontalAlignment="Left" Height="22" Margin="332,20,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="179"/>
+                    <TextBox x:Name="searchText" HorizontalAlignment="Left" Height="22" Margin="332,20,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="179" KeyDown="searchText_KeyDown"/>
                     <Label Content="Search" HorizontalAlignment="Left" Height="27" Margin="23,20,0,0" VerticalAlignment="Top" Width="67"/>
                     <ComboBox x:Name="fieldBox" HorizontalAlignment="Left" Height="22" Margin="95,20,0,0" VerticalAlignment="Top" Width="89" SelectedIndex="0">
                         <ComboBoxItem Content="Last Name"/>
@@ -73,13 +78,13 @@
                         <ComboBoxItem Content="Contains"/>
                         <ComboBoxItem Content="Begins with"/>
                     </ComboBox>
-                    <Button x:Name="searchButton" Content="Search" Height="22" Margin="551,20,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="91" Click="searchButton_Click"/>
+                    <Button x:Name="searchButton" Content="Search" Height="22" Margin="0,20,23,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91" Click="searchButton_Click"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="mailTab" Header="Mail" TabIndex="2">
                 <Grid Background="#FFE5E5E5">
                     <TextBox x:Name="bodyField" Margin="133,91,27,159" TextWrapping="Wrap"/>
-                    <Button x:Name="attatchButton" Content="Attatch" HorizontalAlignment="Right" Height="27" Margin="0,0,548,58" VerticalAlignment="Bottom" Width="96" RenderTransformOrigin="0.458,-0.409" Click="attatchButton_Click"/>
+                    <Button x:Name="attatchButton" Content="Attatch" HorizontalAlignment="Left" Height="27" Margin="21,0,0,58" VerticalAlignment="Bottom" Width="96" RenderTransformOrigin="0.458,-0.409" Click="attatchButton_Click"/>
                     <TextBox x:Name="subjectField" Height="22" Margin="132,50,28,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
                     <TextBox x:Name="sendToField" Height="22" Margin="132,14,28,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True"/>
                     <Label Content="Send to:" HorizontalAlignment="Left" Height="31" Margin="21,14,0,0" VerticalAlignment="Top" Width="85"/>
@@ -87,8 +92,8 @@
                     <Label Content="Subject" HorizontalAlignment="Left" Height="31" Margin="21,50,0,0" VerticalAlignment="Top" Width="85"/>
                     <Label x:Name="errorLabel" Content="" Margin="0,0,357,10" Foreground="#FFEA1616" HorizontalAlignment="Right" Width="280" Height="27" VerticalAlignment="Bottom" VerticalContentAlignment="Center"/>
                     <Label Content="Body" HorizontalAlignment="Left" Height="24" Margin="21,120,0,0" VerticalAlignment="Top" Width="102"/>
-                    <ListBox x:Name="attachmentsListBox" HorizontalAlignment="Right" Margin="0,218,27,58" Width="505"/>
-                    <Label x:Name="attachmentLabel" Content="No attachments" HorizontalAlignment="Right" Height="27" Margin="0,218,537,0" VerticalAlignment="Top" Width="107"/>
+                    <ListBox x:Name="attachmentsListBox" Margin="133,0,27,58" Height="82" VerticalAlignment="Bottom"/>
+                    <Label x:Name="attachmentLabel" Content="No attachments" Margin="21,0,0,113" HorizontalAlignment="Left" Width="107" Height="27" VerticalAlignment="Bottom"/>
                 </Grid>
             </TabItem>
         </TabControl>
