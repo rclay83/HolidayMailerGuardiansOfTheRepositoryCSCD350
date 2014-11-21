@@ -28,30 +28,36 @@ namespace HolidayMailler
 
     public partial class MainWindow : Window
     {
-        private ContactDao contactsDB;
+        private IContactDao contactsDB;
+        private IAccountDao accountsDB;
+
         private List<IContact> contactList;
         private List<IContact> selectedContacts;
 
         private List<I_Account> accounts;
-        private I_Account sender;
         private I_MailMan message;
         private List<string> attachments;
 
         public MainWindow ()
         {
             InitializeComponent();
-            contactsDB = new ContactDao();
+            this.contactsDB = new ContactDao();
+            this.accountsDB = new AccountDao();
+
             this.contactList = this.contactsDB.getAllContacts().Values.ToList();
+            this.accounts = this.accountsDB.getAccounts() as List<I_Account>;
             this.selectedContacts = new List<IContact>();
             this.contactsTable.ItemsSource = contactList;
-            //this.sender = new MockAccount();
+
+            this.sendAsBox.ItemsSource = this.accounts;
+            this.sendAsBox.DisplayMemberPath = "Username";
 
             this.attachments = new List<string>();
         }
 
         private void addContactMenu_Click (object sender, RoutedEventArgs e)
         {
-            Contact toAdd = new Contact();
+            IContact toAdd = new Contact();
             AddContactWindow contactWindow = new AddContactWindow(toAdd);
             contactWindow.ShowDialog();
 
@@ -63,7 +69,7 @@ namespace HolidayMailler
                     this.contactList.Add(toAdd);
                     this.contactsTable.Items.Refresh();
                 }
-                catch (SQLiteException ex)
+                catch (ContactDataExcpetion ex)
                 {
                     MessageBox.Show("There is already a contact in the databse with that email.");
                 }
@@ -76,7 +82,7 @@ namespace HolidayMailler
 
             if (decision == MessageBoxResult.Yes)
             {
-                foreach (Contact toDelete in this.selectedContacts)
+                foreach (IContact toDelete in this.selectedContacts)
                 {
                     this.contactsDB.removeContact(toDelete);
                     this.contactList.Remove(toDelete);
@@ -96,7 +102,7 @@ namespace HolidayMailler
 
         private void OnContactChecked (object sender, RoutedEventArgs e)
         {
-            Contact selected = (Contact)this.contactsTable.SelectedItem;
+            IContact selected = (IContact)this.contactsTable.SelectedItem;
 
             if (!this.selectedContacts.Contains(selected))
             {
@@ -113,7 +119,7 @@ namespace HolidayMailler
 
         private void OnContactUnchecked (object sender, RoutedEventArgs e)
         {
-            this.selectedContacts.Remove((Contact)this.contactsTable.SelectedItem);
+            this.selectedContacts.Remove((IContact)this.contactsTable.SelectedItem);
             this.selectionCountLabel.Content = this.selectedContacts.Count + " Contacts Selected";
             this.resultsLabel.Content = this.selectedContacts.Count + " Contacts Selected";
 
@@ -127,12 +133,13 @@ namespace HolidayMailler
 
         private void OnResultChecked (object sender, RoutedEventArgs e)
         {
-            Contact selectedResult = (Contact)this.resultsTable.SelectedItem;
+            IContact selectedResult = (IContact)this.resultsTable.SelectedItem;
 
             if (!this.selectedContacts.Contains(selectedResult))
             {
                 this.selectedContacts.Add(selectedResult);
 
+                this.selectionCountLabel.Content = this.selectedContacts.Count + " Contacts Selected";
                 this.selectionCountLabel.Content = this.selectedContacts.Count + " Contacts Selected";
                 this.resultsLabel.Content = this.selectedContacts.Count + " Contacts Selected";
             }
@@ -140,8 +147,9 @@ namespace HolidayMailler
 
         private void OnResultUnchecked (object sender, RoutedEventArgs e)
         {
-            this.selectedContacts.Remove((Contact)this.contactsTable.SelectedItem);
+            this.selectedContacts.Remove((IContact)this.resultsTable.SelectedItem);
             this.selectionCountLabel.Content = this.selectedContacts.Count + " Contacts Selected";
+            this.resultsLabel.Content = this.selectedContacts.Count + " Contacts Selected";
 
             if (this.selectedContacts.Count > 0)
             {
@@ -162,7 +170,7 @@ namespace HolidayMailler
 
             if (this.selectedContacts.Count > 0)
             {
-                foreach (Contact contact in this.selectedContacts)
+                foreach (IContact contact in this.selectedContacts)
                 {
                     this.sendToField.Text += contact.Email + ", ";
                 }
@@ -183,31 +191,56 @@ namespace HolidayMailler
                 string[] recipients = new string[this.selectedContacts.Count];
                 int contactIndex = 0;
 
-                foreach (Contact contact in this.selectedContacts)
+                foreach (IContact contact in this.selectedContacts)
                 {
                     recipients[contactIndex++] = contact.Email;
                 }
 
                 try
                 {
-                    //this.message = new MockMailMan(this.sender, recipients, this.subjectField.Text, this.bodyField.Text);
+                    I_Account sendingAccount = this.sendAsBox.SelectedItem as I_Account;
+
+                    if (sendingAccount == null)
+                    {
+                        this.errorLabel.Content = "You must add a sending account before sending mail.";
+                    }
+                    else {
+                    if (sendingAccount.Password == null)
+                    {
+                        if (this.senderPasswordBox.Password.Length == 0)
+                        {
+                            this.errorLabel.Content = "You must provide the password for sending account";
+                            return;
+                        }
+                        else
+                        {
+                            sendingAccount.Password = this.senderPasswordBox.Password;
+                        }
+                    }
+
+                    this.message = new MockMailMan(sendingAccount, recipients, this.subjectField.Text, this.bodyField.Text);
 
                     if (this.attachments.Count > 0)
                     {
-                        //this.message.setAttachment(this.attachments.ToArray());
+                        this.message.setAttachment(this.attachments.ToArray());
                     }
 
-                    //this.message.sendMail();
+                    this.message.sendMail();
+                    MessageBox.Show("Message sent to " + this.selectedContacts.Count + " contacts.", "Success");
+
+                    CleanMail();
+                    this.tabs.SelectedIndex = 0;
+                    }
+
+                }
+                catch (System.Net.Mail.SmtpException ex)
+                {
+                    MessageBox.Show("Authentication error. Check account credentials. " + ex.Message);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("An error occured while attempting to send the message.");
+                    MessageBox.Show("An error occured while sending the mail");
                 }
-
-                MessageBox.Show("Message sent to " + this.selectedContacts.Count + " contacts.", "Success");
-
-                CleanMail();
-                this.tabs.SelectedIndex = 0;
             }
             else
             {
@@ -268,6 +301,11 @@ namespace HolidayMailler
             {
                 aboutMenu_Click(sender, e);
             }
+
+            else if (Keyboard.IsKeyDown(Key.LeftCtrl) && Keyboard.IsKeyDown(Key.E))
+            {
+                newAccountMenu_Click(sender, e);
+            }
         }
 
         private void Window_Closing (object sender, System.ComponentModel.CancelEventArgs e)
@@ -321,9 +359,26 @@ namespace HolidayMailler
 
         private void newAccountMenu_Click (object sender, RoutedEventArgs e)
         {
-            //MockAccount acc = new MockAccount();
-            NewAccountWindow addAccountWindow = new NewAccountWindow(null);
+            I_Account acc = new MockAccount();
+            acc.Username = "";
+
+            NewAccountWindow addAccountWindow = new NewAccountWindow(acc);
             addAccountWindow.ShowDialog();
+
+            if (acc.Username != "")
+            {
+                try
+                {
+                    this.accountsDB.addAccount(acc);
+                    this.accounts.Add(acc);
+                }
+                catch (ContactDataExcpetion ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+
+                this.sendAsBox.Items.Refresh();
+            }
         }
 
         private void searchText_KeyDown (object sender, KeyEventArgs e)
@@ -331,6 +386,23 @@ namespace HolidayMailler
             if (e.Key == Key.Enter)
             {
                 searchButton_Click(sender, e);
+            }
+        }
+
+        private void sendAsBox_SelectionChanged (object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            I_Account sendingAccount = this.sendAsBox.SelectedItem as I_Account;
+
+            if (sendingAccount.Password == null)
+            {
+                this.senderPasswordBox.Clear();
+                this.senderPasswordBox.IsEnabled = true;
+                this.passwordLabel.IsEnabled = true;
+            }
+            else
+            {
+                this.senderPasswordBox.IsEnabled = false;
+                this.passwordLabel.IsEnabled = false;
             }
         }
 
