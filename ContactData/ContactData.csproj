@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CDAccount.cs" />
     <Compile Include="AccountDao.cs" />
     <Compile Include="Contact.cs" />
     <Compile Include="ContactDataExcpetion.cs" />

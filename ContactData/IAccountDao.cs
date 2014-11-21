@@ -10,7 +10,7 @@ namespace ContactData
 {
     public interface IAccountDao
     {
-        List<I_Account> getAccounts();
+        IList<I_Account> getAccounts();
         void addAccount(I_Account toAdd);
         void removeAccount(I_Account toRemove);
         void updateAccount(I_Account toUpdate);

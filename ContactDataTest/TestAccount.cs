@@ -79,5 +79,22 @@ namespace ContactDataTest
                 throw new NotImplementedException();
             }
         }
+
+        public override bool Equals(object obj)
+        {
+            TestAccount that = obj as TestAccount;
+            if (that == null)
+            {
+                return false;
+            }
+
+
+            return this.Username == that.Username;
+        }
+
+        public override int GetHashCode()
+        {
+            return (this.Username == null ? 17 : this.Username.GetHashCode()) ^ (this.Password == null ? 17 : this.Password.GetHashCode());
+        }
     }
 }

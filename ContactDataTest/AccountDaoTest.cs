@@ -4,6 +4,7 @@ using ContactData;
 using System.Data.SQLite;
 using System.Data;
 using Email;
+using System.Collections.Generic;
 
 namespace ContactDataTest
 {
@@ -50,6 +51,8 @@ namespace ContactDataTest
         public void GetAllAccountsTest()
         {
             this.accountDao.addAccount(this.account);
+            IList<I_Account> accounts = this.accountDao.getAccounts();
+            Assert.IsTrue(accounts.Contains(this.account));
         }
 
         [TestMethod]
