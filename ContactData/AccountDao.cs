@@ -20,32 +20,35 @@ namespace ContactData
 
         public void addAccount(Email.I_Account toAdd)
         {
-            if (String.IsNullOrEmpty(toAdd.Sender) || String.IsNullOrEmpty(toAdd.SmtpServer))
+            if (String.IsNullOrEmpty(toAdd.Username) || String.IsNullOrEmpty(toAdd.SmtpServer))
             {
                 throw new ContactDataExcpetion("Missing required table field");
             }
-            if (null == toAdd.Port)
-            {
-                throw new ContactDataExcpetion("Missing required table field");
-            }
+            
             using (IDbCommand command = connection.CreateCommand())
             {
                 try
                 {
-                    string commandText = "INSERT INTO AllContacts(first_name,last_name,email,got_mail)" +
-                        "VALUES(@first,@last,@email,@got_mail)";
+                    // Accounts schema
+                    //"accountName VARCHAR(50) 
+                    //"smtpHost VARCHAR(50) 
+                    //"portNo int(5) 
+                    //"isSSL BOOLEAN 
+
+                    string commandText = "INSERT INTO Accounts(accountName,smtpHost,portNo,isSSL)" +
+                        "VALUES(@userName,@smtpHost,@portNo,@SSL)";
 
                     command.CommandText = commandText;
 
-                    command.Parameters.Add(new SQLiteParameter("@first") { Value = toAdd.FirstName });
-                    command.Parameters.Add(new SQLiteParameter("@last") { Value = toAdd.LastName });
-                    command.Parameters.Add(new SQLiteParameter("@email") { Value = toAdd.Email });
-                    command.Parameters.Add(new SQLiteParameter("@got_mail") { Value = toAdd.GotMail });
+                    command.Parameters.Add(new SQLiteParameter("@userName") { Value = toAdd.Username });
+                    command.Parameters.Add(new SQLiteParameter("@smtpHost") { Value = toAdd.SmtpServer });
+                    command.Parameters.Add(new SQLiteParameter("@portNo") { Value = toAdd.Port });
+                    command.Parameters.Add(new SQLiteParameter("@SSL") { Value = toAdd.SSL });
 
                     verifyTable(this.connection);
                     connection.Open();
                     command.ExecuteNonQuery();
-                    return true;
+                    
 
                 }
                 catch (SQLiteException ex)
@@ -62,7 +65,36 @@ namespace ContactData
 
         public void removeAccount(Email.I_Account toRemove)
         {
-            throw new NotImplementedException();
+            if (String.IsNullOrEmpty(toRemove.Username))
+            {
+                throw new ContactDataExcpetion("Missing required table field");
+            }
+
+            using (IDbCommand command = connection.CreateCommand())
+            {
+                try
+                {
+                    string commandText = "DELETE FROM Accounts " +
+                        "WHERE accountName = @userName;";
+
+                    command.CommandText = commandText;
+
+                    command.Parameters.Add(new SQLiteParameter("@userName") { Value = toRemove.Username });
+
+                    verifyTable(this.connection);
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                }
+                catch (SQLiteException ex)
+                {
+                    throw new ContactDataExcpetion("Unexpected SQLException: " + ex.Message);
+                }
+                finally
+                {
+                    connection.Close();
+                }
+
+            }
         }
 
         public void updateAccount(Email.I_Account toUpdate)
@@ -125,8 +157,8 @@ namespace ContactData
 
                         if (null != dataReader["accountName"])
                         {
+                            accountToAdd.Username = (string)dataReader["accountName"];
                             accountToAdd.Sender = (string)dataReader["accountName"];
-
                         }
                         if (null != dataReader["smtpHost"])
                         {

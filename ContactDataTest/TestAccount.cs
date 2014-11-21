@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Email;
+using ContactData;
 
 namespace ContactDataTest
 {
-    class TestAccount : I_Account
+    class TestAccount : I_Account, IComparable<I_Account>
     {
         public string Password
         {
@@ -88,13 +89,19 @@ namespace ContactDataTest
                 return false;
             }
 
-
-            return this.Username == that.Username;
+            return this.Username.Equals(that.Username);
         }
+
+
 
         public override int GetHashCode()
         {
             return (this.Username == null ? 17 : this.Username.GetHashCode()) ^ (this.Password == null ? 17 : this.Password.GetHashCode());
+        }
+
+        public int CompareTo(I_Account other)
+        {
+            return this.Username.CompareTo(other.Username);
         }
     }
 }

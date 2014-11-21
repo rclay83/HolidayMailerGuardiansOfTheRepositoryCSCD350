@@ -163,14 +163,11 @@ namespace ContactData
          * */
         public bool removeContact(IContact toRemove)
         {
-            if (null == toRemove.FirstName || null == toRemove.Email)
+            if (String.IsNullOrEmpty(toRemove.Email))
             {
                 throw new ContactDataExcpetion("Missing required table field");
             }
-            if (0 == toRemove.FirstName.Length || 0 == toRemove.Email.Length)
-            {
-                throw new ContactDataExcpetion("Missing required table field");
-            }
+            
             using (IDbCommand command = connection.CreateCommand())
             {
                 try
