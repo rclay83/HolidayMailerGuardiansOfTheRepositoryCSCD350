@@ -32,6 +32,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Email, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\Email.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SQLite">
@@ -44,8 +48,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CDAccount.cs" />
+    <Compile Include="AccountDao.cs" />
     <Compile Include="Contact.cs" />
     <Compile Include="ContactDataExcpetion.cs" />
+    <Compile Include="IAccountDao.cs" />
     <Compile Include="MockContactDao.cs" />
     <Compile Include="ContactDao.cs" />
     <Compile Include="IContact.cs" />

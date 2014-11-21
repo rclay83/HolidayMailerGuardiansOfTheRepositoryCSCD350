@@ -9,76 +9,34 @@ namespace ContactData
 {
     public class CDAccount : I_Account
     {
-        public string Password
+        public string Password { get; set; }
+
+        public int Port { get; set; }
+
+
+        public bool SSL { get; set; }
+
+        public string Sender { get; set; }
+
+
+        public string SmtpServer { get; set; }
+
+        public string Username { get; set; }
+
+        public override bool Equals(object obj)
         {
-            get
+            CDAccount that = obj as CDAccount;
+            if (that == null)
             {
-                throw new NotImplementedException();
+                return false;
             }
-            set
-            {
-                throw new NotImplementedException();
-            }
+            return this.Username == that.Username;
         }
 
-        public int Port
+        public override int GetHashCode()
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
+            return (this.Username == null ? 17 : this.Username.GetHashCode()) ^ (this.Password == null ? 17 : this.Password.GetHashCode());
         }
 
-        public bool SSL
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public string Sender
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public string SmtpServer
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public string Username
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
     }
 }

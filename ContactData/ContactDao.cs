@@ -15,7 +15,7 @@ namespace ContactData
 
 
 
-        public ContactDao() 
+        public ContactDao()
         {
             this.connection = new SQLiteConnection("Data Source=Contacts.db;Version=3;New=True;Compress=True;");
         }
@@ -53,11 +53,11 @@ namespace ContactData
                             contactToAdd.Email = (string)dataReader["email"];
 
                         }
-                        if(null != dataReader["first_name"])
+                        if (null != dataReader["first_name"])
                         {
                             contactToAdd.FirstName = (string)dataReader["first_name"];
                         }
-                      
+
                         if (null != dataReader["last_name"])
                         {
                             contactToAdd.LastName = (string)dataReader["last_name"];
@@ -65,15 +65,16 @@ namespace ContactData
                         contactToAdd.GotMail = (bool)dataReader["got_mail"];
                         map.Add(contactToAdd.Email, contactToAdd);
                     }
-                    
+
                 }
-                //catch(Exception err)
-                //{
-                //todo: implement try/catch logic. throw custom exception
-                //}
+                catch (SQLiteException err)
+                {
+                    throw new ContactDataExcpetion("Cannot return all contacts. unexpected sqlite exception: " +
+                    err.Message);
+                }
                 finally
                 {
-                    if(null != dataReader)
+                    if (null != dataReader)
                     {
                         dataReader.Close();
                     }
@@ -84,7 +85,7 @@ namespace ContactData
             return map;
         }
 
-       
+
 
 
         public void verifyTable(IDbConnection connection)
@@ -145,7 +146,7 @@ namespace ContactData
                     return true;
 
                 }
-                catch(SQLiteException ex)
+                catch (SQLiteException ex)
                 {
                     throw new ContactDataExcpetion("Unexpected SQLException: " + ex.Message);
                 }
@@ -162,14 +163,11 @@ namespace ContactData
          * */
         public bool removeContact(IContact toRemove)
         {
-            if (null == toRemove.FirstName || null == toRemove.Email)
+            if (String.IsNullOrEmpty(toRemove.Email))
             {
                 throw new ContactDataExcpetion("Missing required table field");
             }
-            if (0 == toRemove.FirstName.Length || 0 == toRemove.Email.Length)
-            {
-                throw new ContactDataExcpetion("Missing required table field");
-            }
+            
             using (IDbCommand command = connection.CreateCommand())
             {
                 try
@@ -194,7 +192,7 @@ namespace ContactData
                 {
                     connection.Close();
                 }
-                
+
             }
         }
 

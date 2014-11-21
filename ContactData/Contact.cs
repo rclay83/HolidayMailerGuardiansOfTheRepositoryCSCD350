@@ -47,7 +47,7 @@ namespace ContactData
         public override bool Equals(object obj)
         {
             Contact that = obj as Contact;
-            if (obj == null)
+            if (that == null)
             {
                 return false;
             }

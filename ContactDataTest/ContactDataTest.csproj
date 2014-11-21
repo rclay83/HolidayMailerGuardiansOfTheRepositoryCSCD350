@@ -37,6 +37,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Email">
+      <HintPath>..\lib\Email.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.SQLite">
@@ -58,6 +61,8 @@
   <ItemGroup>
     <Compile Include="ContactDaoTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="AccountDaoTest.cs" />
+    <Compile Include="TestAccount.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ContactData\ContactData.csproj">
