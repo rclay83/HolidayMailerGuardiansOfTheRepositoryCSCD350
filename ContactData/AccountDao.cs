@@ -111,8 +111,8 @@ namespace ContactData
                 {
 
                     cmd.CommandText = "CREATE TABLE IF NOT EXISTS Accounts(" +
-                        "accountName VARCHAR(50) NOT NULL," +
-                        "smtpHost VARCHAR(50) PRIMARY KEY," +
+                        "accountName VARCHAR(50) NOT NULL PRIMARY KEY," +
+                        "smtpHost VARCHAR(50)," +
                         "portNo int(5) NOT NULL," +
                         "isSSL BOOLEAN DEFAULT 'false' NOT NULL);";
                     try

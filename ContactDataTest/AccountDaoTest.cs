@@ -55,6 +55,27 @@ namespace ContactDataTest
         }
 
         [TestMethod]
+        public void AddMultipleAccounts()
+        {
+            I_Account testAccount = new CDAccount()
+            {
+                Username = this.account.Username,
+                Password = this.account.Password,
+                Port = this.account.Port,
+                Sender = this.account.Sender,
+                SmtpServer = this.account.SmtpServer,
+                SSL = this.account.SSL
+            };
+
+            this.accountDao.addAccount(this.account);
+            testAccount.Username = "Modified";
+            this.accountDao.addAccount(testAccount);
+            testAccount.Username = "Modified2";
+            this.accountDao.addAccount(testAccount);
+            Assert.IsTrue(this.accountDao.getAccounts().Count == 3);
+        }
+
+        [TestMethod]
         public void TestGetAllAccountsEmptyTable()
         {
             IList<I_Account> returnedAccounts = this.accountDao.getAccounts();
