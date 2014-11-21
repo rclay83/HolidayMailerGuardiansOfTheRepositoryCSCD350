@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Email
 {
-    interface I_MailMan
+    public interface I_MailMan
     {
         void sendMail();
 

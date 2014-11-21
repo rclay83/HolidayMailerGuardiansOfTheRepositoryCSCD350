@@ -1,23 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Email
 {
-    interface I_Account
+    public interface I_Account
     {
-        void setSender(string sender);
+        string Sender { get; set; }
 
-        void setPassword(string password);
+        string Password { get; set; }
 
-        void setUsername(string username);
+        string Username { get; set; }
 
-        void setSMTPserver(string smtpServer);
+        string SmtpServer { get; set; }
 
-        void setPort(int port);
+        int Port { get; set; }
 
-        void setSSL(bool enabled);
+        bool SSL { get; set; }
     }
 }
