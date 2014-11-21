@@ -14,6 +14,8 @@ namespace ContactDataTest
     {
 
         SQLiteConnection conn;
+        IContact contact;
+        IContactDao contactDao;
 
         public ContactDaoTest()
         {
@@ -25,15 +27,25 @@ namespace ContactDataTest
         [TestInitialize]
         public void setupDb()
         {
-            
+            // test contact for insertions, deletions, etc...
+            this.contact = new Contact()
+            {
+                FirstName = "Peter",
+                LastName = "Parker",
+                Email = "guardiansoftherepository@gmail.com",
+                GotMail = true
+            };
+
+            this.contactDao = new ContactDao();
+
+            // clean up database before any tests    
             using (IDbCommand cmd = conn.CreateCommand())
             {
                 string ctext = "DELETE FROM AllContacts;";
                 cmd.CommandText = ctext;
                 try
                 {
-                    IContactDao cdao = new ContactDao();
-                    cdao.verifyTable(this.conn);
+                    this.contactDao.verifyTable(this.conn);
                     conn.Open();
                     cmd.ExecuteNonQuery();
 
@@ -44,31 +56,30 @@ namespace ContactDataTest
                 }
             }
         }
-     
+
 
 
         [TestMethod]
         public void TestAddContact()
         {
-            IContactDao cdao = new ContactDao();
             IContact toAdd = new MockContact();
-            Assert.AreEqual(true, cdao.addContact(toAdd));
-           
+            Assert.AreEqual(true, this.contactDao.addContact(toAdd));
+
         }
 
-            
+
         [TestMethod]
         public void TestAddContactWithMail()
         {
-            IContactDao cdao = new ContactDao();
-            IContact toAdd = new Contact() 
-            { 
-                FirstName = "Peter", 
-                LastName = "Parker", 
-                Email = "spider@spidermail.com", 
-                GotMail = true };
-            cdao.addContact(toAdd);
-            IDictionary<string, IContact> allContacts = cdao.getAllContacts();
+            IContact toAdd = new Contact()
+            {
+                FirstName = "Peter",
+                LastName = "Parker",
+                Email = "spider@spidermail.com",
+                GotMail = true
+            };
+            this.contactDao.addContact(toAdd);
+            IDictionary<string, IContact> allContacts = this.contactDao.getAllContacts();
             IContact contactReturned = allContacts[toAdd.Email];
             Assert.AreEqual(toAdd, contactReturned);
 
@@ -76,31 +87,27 @@ namespace ContactDataTest
         [TestMethod]
         public void TestAddContactWithoutLastName()
         {
-            IContactDao cdao = new ContactDao();
-   
             IContact mock = new MockContact();
             IContact toAdd = new Contact() { FirstName = mock.FirstName, Email = mock.Email };
 
-            Assert.AreEqual(true, cdao.addContact(toAdd));
+            Assert.AreEqual(true, this.contactDao.addContact(toAdd));
 
         }
 
         [TestMethod]
         public void TestGetAllContacts()
         {
-            IContactDao cdao = new ContactDao();
             IContact mock = new MockContact();
-            cdao.addContact(mock);
-            IDictionary<string, IContact> map = cdao.getAllContacts();
+            this.contactDao.addContact(mock);
+            IDictionary<string, IContact> map = this.contactDao.getAllContacts();
             Assert.AreEqual(mock.FirstName, map[mock.Email].FirstName);
         }
         [TestMethod]
-       [ExpectedException(typeof(ContactDataExcpetion))]
+        [ExpectedException(typeof(ContactDataExcpetion))]
         public void TestInsertContactNoEmail()
         {
-            IContactDao cdao = new ContactDao();
             IContact toAdd = new Contact() { LastName = "some name last", FirstName = "some first name" };
-            cdao.addContact(toAdd);
+            this.contactDao.addContact(toAdd);
 
         }
 
@@ -108,9 +115,8 @@ namespace ContactDataTest
         [ExpectedException(typeof(ContactDataExcpetion))]
         public void TestInsertContactNoFirstName()
         {
-            IContactDao cdao = new ContactDao();
             IContact toAdd = new Contact() { LastName = "some name last", Email = "some email" };
-            cdao.addContact(toAdd);
+            this.contactDao.addContact(toAdd);
 
         }
 
@@ -137,10 +143,27 @@ namespace ContactDataTest
             Contact c2 = null;
             Assert.AreNotEqual(c1, c2);
         }
+
+        [TestMethod]
+        public void TestRemoveContact()
+        {
+            this.contactDao.addContact(this.contact);
+            this.contactDao.removeContact(this.contact);
+            IDictionary<string, IContact> allContacts = this.contactDao.getAllContacts();
+            Assert.IsTrue(!allContacts.Values.Contains(this.contact));
+        }
+
+        [TestMethod]
+        public void TestRemoveNonExistingContact()
+        {
+            this.contactDao.removeContact(this.contact);
+            IDictionary<string, IContact> allContacts = this.contactDao.getAllContacts();
+            Assert.IsTrue(!allContacts.Values.Contains(this.contact));
+        }
     }
 }
-       
 
-       
+
+
 
 
