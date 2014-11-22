@@ -17,9 +17,9 @@ namespace HolidayMailler
 {
     public partial class AddContactWindow : Window
     {
-        private Contact contact;
+        private IContact contact;
 
-        public AddContactWindow (Contact newContact)
+        public AddContactWindow (IContact newContact)
         {
             InitializeComponent();
             this.contact = newContact;
