@@ -160,6 +160,23 @@ namespace ContactDataTest
             IDictionary<string, IContact> allContacts = this.contactDao.getAllContacts();
             Assert.IsTrue(!allContacts.Values.Contains(this.contact));
         }
+
+        [TestMethod]
+        public void TestUpdateContact()
+        {
+            this.contactDao.addContact(this.contact);
+            this.contact.FirstName = "Modified";
+            this.contactDao.updateContact(this.contact);
+            IDictionary<string, IContact> map = this.contactDao.getAllContacts();
+            Assert.AreEqual(this.contact.FirstName, map[this.contact.Email].FirstName);
+        }
+
+        [TestMethod]
+        public void TestUpdateNonExistentContact()
+        {
+            this.contactDao.updateContact(this.contact);
+            Assert.IsTrue(contactDao.getAllContacts().Count == 0);
+        }
     }
 }
 

@@ -198,7 +198,45 @@ namespace ContactData
 
         public bool updateContact(IContact toUpdate)
         {
-            throw new NotImplementedException();
+            if (null == toUpdate.FirstName || null == toUpdate.Email || null == toUpdate.LastName)
+            {
+                throw new ContactDataExcpetion("Missing required table field");
+            }
+            if (0 == toUpdate.FirstName.Length || 0 == toUpdate.Email.Length)
+            {
+                throw new ContactDataExcpetion("Missing required table field");
+            }
+            using (IDbCommand command = connection.CreateCommand())
+            {
+                try
+                {
+                    string commandText = "UPDATE AllContacts " +
+                        "SET first_name = @first, last_name = @last, got_mail = @got_mail "+
+                        "WHERE email = @email;";
+
+                    command.CommandText = commandText;
+
+                    command.Parameters.Add(new SQLiteParameter("@first") { Value = toUpdate.FirstName });
+                    command.Parameters.Add(new SQLiteParameter("@last") { Value = toUpdate.LastName });
+                    command.Parameters.Add(new SQLiteParameter("@email") { Value = toUpdate.Email });
+                    command.Parameters.Add(new SQLiteParameter("@got_mail") { Value = toUpdate.GotMail });
+
+                    verifyTable(this.connection);
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                    return true;
+
+                }
+                catch (SQLiteException ex)
+                {
+                    throw new ContactDataExcpetion("Unexpected SQLException: " + ex.Message);
+                }
+                finally
+                {
+                    connection.Close();
+                }
+
+            }
         }
     }
 
