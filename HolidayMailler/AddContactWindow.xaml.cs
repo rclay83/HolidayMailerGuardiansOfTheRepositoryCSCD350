@@ -7,7 +7,7 @@ using System.Windows.Input;
  *  Guardians of the Repository
  * 
  *  Author: Marcus Sanchez
- *  Last revision:  11/8/2014
+ *  Last revision:  11/20/2014
  *  
  *  AddContactWindow is responsible for prompting the user for new contact information.
  *  
@@ -25,11 +25,17 @@ namespace HolidayMailler
             this.contact = newContact;
         }
 
+        /*  Regex taken from MSDN Site: http://msdn.microsoft.com/en-us/library/01escwtf%28v=vs.110%29.aspx
+         */
+
         private void addButton_Click (object sender, RoutedEventArgs e)
         {
             if (Regex.IsMatch(this.firstNameField.Text, @"^[a-zA-Z]*$") && Regex.IsMatch(this.lastNameField.Text, @"^[a-zA-Z]*$"))
             {
-                if (Regex.IsMatch(this.emailField.Text, @"^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$"))
+                string emailRegex = @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
+                                  @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))$";
+
+                if (Regex.IsMatch(this.emailField.Text, emailRegex, RegexOptions.IgnoreCase))
                 {
                     this.contact.FirstName = this.firstNameField.Text;
                     this.contact.LastName = this.lastNameField.Text;

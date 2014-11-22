@@ -12,6 +12,16 @@ using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 
+/*  Holiday Mailer
+ *  Guardians of the Repository
+ * 
+ *  Author: Marcus Sanchez
+ *  Last revision:  11/20/2014
+ *  
+ *  Utilized for testing of I_Account and I_MailMan interfaces
+ *  
+ */
+
 namespace HolidayMailler
 {
     public class MockMailMan : Email.I_MailMan

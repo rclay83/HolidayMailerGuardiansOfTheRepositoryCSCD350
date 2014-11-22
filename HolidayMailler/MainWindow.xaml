@@ -39,9 +39,10 @@
                             <DataGridCheckBoxColumn Header="Received" Binding="{Binding GotMail}" Width="60" CanUserResize="False" IsReadOnly="True"></DataGridCheckBoxColumn>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <Button x:Name="composeButton" Content="Compose Mail" Margin="0,0,23,7" Height="21" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="87" IsEnabled="False" Click="composeButton_Click" ToolTipService.ShowOnDisabled="True" ToolTip="One or more contacts must be selected to send mail."/>
+                    <Button x:Name="composeButton" Content="Compose Mail" Margin="0,0,23,7" Height="21" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="87" Click="composeButton_Click" ToolTipService.ShowOnDisabled="True"/>
                     <Label x:Name="selectionCountLabel" Content="0 Contacts Selected" HorizontalAlignment="Left" Height="30" Margin="21,0,0,0" VerticalAlignment="Bottom" Width="126"/>
                     <Label x:Name="searchResultsLabel" Content="" HorizontalAlignment="Left" Height="30" Margin="451,0,0,39" VerticalAlignment="Bottom" Width="126"/>
+                    <Button x:Name="removeButton" Content="Remove Selected" Height="23" Margin="0,0,329,7" VerticalAlignment="Bottom" Click="removeContactMenu_Click" HorizontalAlignment="Right" Width="104" IsEnabled="False"/>
                 </Grid>
 
             </TabItem>
@@ -78,6 +79,8 @@
                         <ComboBoxItem Content="Begins with"/>
                     </ComboBox>
                     <Button x:Name="searchButton" Content="Search" Height="22" Margin="0,20,23,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91" Click="searchButton_Click"/>
+                    <Button Content="Compose Mail" Margin="0,0,23,7" Height="21" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="87" Click="composeButton_Click" ToolTipService.ShowOnDisabled="True"/>
+                    <Button x:Name="searchRemoveButton" Content="Remove Selected" Height="23" Margin="0,0,329,7" VerticalAlignment="Bottom" Click="removeContactMenu_Click" HorizontalAlignment="Right" Width="104" IsEnabled="False"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="mailTab" Header="Mail" TabIndex="2">
@@ -96,7 +99,7 @@
                     <Label Content="Send as:" HorizontalAlignment="Left" Height="31" Margin="21,10,0,0" VerticalAlignment="Top" Width="85"/>
                     <ComboBox x:Name="sendAsBox" HorizontalAlignment="Left" Height="22" Margin="133,10,0,0" VerticalAlignment="Top" Width="279" SelectedIndex="0" SelectionChanged="sendAsBox_SelectionChanged"/>
                     <PasswordBox x:Name="senderPasswordBox" HorizontalAlignment="Right" Height="22" Margin="0,10,27,0" VerticalAlignment="Top" Width="199" IsEnabled="False"/>
-                    <Label x:Name="passwordLabel" Content="Password&#xD;&#xA;" HorizontalAlignment="Right" Margin="0,10,231,0" VerticalAlignment="Top" Width="64" Height="31"/>
+                    <Label x:Name="passwordLabel" Content="Password&#xD;&#xA;" HorizontalAlignment="Right" Margin="0,10,231,0" VerticalAlignment="Top" Width="64" Height="31" IsEnabled="False"/>
                 </Grid>
             </TabItem>
         </TabControl>

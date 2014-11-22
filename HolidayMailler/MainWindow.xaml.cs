@@ -2,12 +2,13 @@
 using System.Windows;
 using ContactData;
 using System.Collections.Generic;
-using System.Data.SQLite;
 using System;
 using Microsoft.Win32;
 using System.Windows.Input;
 using Email;
 using System.Reflection;
+using System.Collections.ObjectModel;
+using System.Windows.Controls;
 
 /*  Holiday Mailer
  *  Guardians of the Repository
@@ -19,8 +20,8 @@ using System.Reflection;
  *  User interation with contact database and mail sending occurs here.
  *  
  *  TO DO:
- *      -Genericize redundant event handlers (pressing enter in field call button press)
  *      -If contact is deleted/selected in contacts/search tab update other
+ *      - BUG: cannot change sending account after sending an email
  */
 
 namespace HolidayMailler
@@ -32,8 +33,7 @@ namespace HolidayMailler
         private IAccountDao accountsDB;
 
         private List<IContact> contactList;
-        private List<IContact> selectedContacts;
-
+        private ObservableCollection<IContact> selectedContacts;
         private List<I_Account> accounts;
         private I_MailMan message;
         private List<string> attachments;
@@ -46,13 +46,37 @@ namespace HolidayMailler
 
             this.contactList = this.contactsDB.getAllContacts().Values.ToList();
             this.accounts = this.accountsDB.getAccounts() as List<I_Account>;
-            this.selectedContacts = new List<IContact>();
             this.contactsTable.ItemsSource = contactList;
+
+            this.selectedContacts = new ObservableCollection<IContact>();
+            this.selectedContacts.CollectionChanged += SelectedContactsUpdated;
 
             this.sendAsBox.ItemsSource = this.accounts;
             this.sendAsBox.DisplayMemberPath = "Username";
 
             this.attachments = new List<string>();
+        }
+
+        private void SelectedContactsUpdated (object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            this.selectionCountLabel.Content = this.selectedContacts.Count + " Contacts Selected";
+            this.selectionCountLabel.Content = this.selectedContacts.Count + " Contacts Selected";
+            this.resultsLabel.Content = this.selectedContacts.Count + " Contacts Selected";
+
+            if (this.selectedContacts.Count > 0)
+            {
+                this.removeContactMenu.IsEnabled = true;
+                this.removeButton.IsEnabled = true;
+                this.searchRemoveButton.IsEnabled = true;
+            }
+            else
+            {
+                this.removeContactMenu.IsEnabled = false;
+                this.removeButton.IsEnabled = false;
+                this.searchRemoveButton.IsEnabled = false;
+            }
+
+            UpdateRecipientField();
         }
 
         private void addContactMenu_Click (object sender, RoutedEventArgs e)
@@ -93,6 +117,12 @@ namespace HolidayMailler
             }
             this.contactsTable.CancelEdit();
             this.contactsTable.Items.Refresh();
+
+            if (this.selectedContacts.Count == 0)
+            {
+                this.removeContactMenu.IsEnabled = false;
+                this.removeButton.IsEnabled = false;
+            }
         }
 
         private void aboutMenu_Click (object sender, RoutedEventArgs e)
@@ -102,61 +132,34 @@ namespace HolidayMailler
 
         private void OnContactChecked (object sender, RoutedEventArgs e)
         {
-            IContact selected = (IContact)this.contactsTable.SelectedItem;
+            IContact selected = this.contactsTable.SelectedItem as IContact;
 
             if (!this.selectedContacts.Contains(selected))
             {
                 this.selectedContacts.Add(selected);
-                this.selectionCountLabel.Content = this.selectedContacts.Count + " Contacts Selected";
-                this.resultsLabel.Content = this.selectedContacts.Count + " Contacts Selected";
-
-                this.composeButton.IsEnabled = true;
-                this.removeContactMenu.IsEnabled = true;
-
-                UpdateRecipientField();
             }
         }
 
         private void OnContactUnchecked (object sender, RoutedEventArgs e)
         {
-            this.selectedContacts.Remove((IContact)this.contactsTable.SelectedItem);
-            this.selectionCountLabel.Content = this.selectedContacts.Count + " Contacts Selected";
-            this.resultsLabel.Content = this.selectedContacts.Count + " Contacts Selected";
-
-            if (this.selectedContacts.Count > 0)
-            {
-                this.removeContactMenu.IsEnabled = false;
-            }
-
-            UpdateRecipientField();
+            var table = sender as DataGrid;
+            this.selectedContacts.Remove(this.resultsTable.SelectedItem as IContact);
         }
 
         private void OnResultChecked (object sender, RoutedEventArgs e)
         {
-            IContact selectedResult = (IContact)this.resultsTable.SelectedItem;
+            IContact selected = this.resultsTable.SelectedItem as IContact;
 
-            if (!this.selectedContacts.Contains(selectedResult))
+            if (!this.selectedContacts.Contains(selected))
             {
-                this.selectedContacts.Add(selectedResult);
-
-                this.selectionCountLabel.Content = this.selectedContacts.Count + " Contacts Selected";
-                this.selectionCountLabel.Content = this.selectedContacts.Count + " Contacts Selected";
-                this.resultsLabel.Content = this.selectedContacts.Count + " Contacts Selected";
+                this.selectedContacts.Add(selected);
             }
         }
 
         private void OnResultUnchecked (object sender, RoutedEventArgs e)
         {
-            this.selectedContacts.Remove((IContact)this.resultsTable.SelectedItem);
-            this.selectionCountLabel.Content = this.selectedContacts.Count + " Contacts Selected";
-            this.resultsLabel.Content = this.selectedContacts.Count + " Contacts Selected";
-
-            if (this.selectedContacts.Count > 0)
-            {
-                this.removeContactMenu.IsEnabled = false;
-            }
-
-            UpdateRecipientField();
+            var table = sender as DataGrid;
+            this.selectedContacts.Remove(this.contactsTable.SelectedItem as IContact);
         }
 
         private void exitMenu_Click (object sender, RoutedEventArgs e)
@@ -186,7 +189,15 @@ namespace HolidayMailler
 
         private void sendButton_Click (object sender, RoutedEventArgs e)
         {
-            if (this.subjectField.Text.Length > 0 && this.bodyField.Text.Length > 0)
+            if (this.selectedContacts.Count == 0)
+            {
+                this.errorLabel.Content = "You must select contacts before sending mail.";
+            }
+            else if (this.subjectField.Text.Length == 0 || this.bodyField.Text.Length == 0)
+            {
+                this.errorLabel.Content = "A subject and body are required";
+            }
+            else
             {
                 string[] recipients = new string[this.selectedContacts.Count];
                 int contactIndex = 0;
@@ -196,61 +207,54 @@ namespace HolidayMailler
                     recipients[contactIndex++] = contact.Email;
                 }
 
+                I_Account sendingAccount = this.sendAsBox.SelectedItem as I_Account;
+
                 try
                 {
-                    I_Account sendingAccount = this.sendAsBox.SelectedItem as I_Account;
-
                     if (sendingAccount == null)
                     {
                         this.errorLabel.Content = "You must add a sending account before sending mail.";
                     }
-                    else {
-                    if (sendingAccount.Password == null)
+                    else
                     {
-                        if (this.senderPasswordBox.Password.Length == 0)
+                        if (sendingAccount.Password == null)
                         {
-                            this.errorLabel.Content = "You must provide the password for sending account";
-                            return;
+                            if (this.senderPasswordBox.Password.Length == 0)
+                            {
+                                this.errorLabel.Content = "You must provide the password for sending account";
+                                return;
+                            }
+                            else
+                            {
+                                sendingAccount.Password = this.senderPasswordBox.Password;
+                            }
                         }
-                        else
+
+                        this.message = new MockMailMan(sendingAccount, recipients, this.subjectField.Text, this.bodyField.Text);
+
+                        if (this.attachments.Count > 0)
                         {
-                            sendingAccount.Password = this.senderPasswordBox.Password;
+                            this.message.setAttachment(this.attachments.ToArray());
                         }
+
+                        this.message.sendMail();
+                        MessageBox.Show("Message sent to " + this.selectedContacts.Count + " contacts.", "Success");
+
+                        CleanMail();
+                        this.tabs.SelectedIndex = 0;
+
+                        this.sendAsBox.SelectedItem = null;
+                        this.sendAsBox.SelectedIndex = -1;
                     }
-
-                    this.message = new MockMailMan(sendingAccount, recipients, this.subjectField.Text, this.bodyField.Text);
-
-                    if (this.attachments.Count > 0)
-                    {
-                        this.message.setAttachment(this.attachments.ToArray());
-                    }
-
-                    this.message.sendMail();
-                    MessageBox.Show("Message sent to " + this.selectedContacts.Count + " contacts.", "Success");
-
-                    CleanMail();
-                    this.tabs.SelectedIndex = 0;
-                    }
-
                 }
                 catch (System.Net.Mail.SmtpException ex)
                 {
-                    MessageBox.Show("Authentication error. Check account credentials. " + ex.Message);
+                    sendingAccount.Password = null;
+                    MessageBox.Show("Authentication error. Check account credentials.\n" + ex.Message);
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show("An error occured while sending the mail");
-                }
-            }
-            else
-            {
-                if (this.selectedContacts.Count == 0)
-                {
-                    this.errorLabel.Content = "Contacts must be selected before sending";
-                }
-                else
-                {
-                    this.errorLabel.Content = "A subject and body are required";
                 }
             }
         }
@@ -369,8 +373,16 @@ namespace HolidayMailler
             {
                 try
                 {
-                    this.accountsDB.addAccount(acc);
-                    this.accounts.Add(acc);
+                    if (CheckUniqueAccount(acc))
+                    {
+                        this.accounts.Add(acc);
+                        this.accountsDB.addAccount(acc);
+                    }
+                    else
+                    {
+                        MessageBox.Show("That email address is already in the accounts list.");
+                    }
+
                 }
                 catch (ContactDataExcpetion ex)
                 {
@@ -379,6 +391,18 @@ namespace HolidayMailler
 
                 this.sendAsBox.Items.Refresh();
             }
+        }
+
+        private bool CheckUniqueAccount (I_Account toAdd)
+        {
+            foreach (I_Account account in this.accounts)
+            {
+                if (account.Username == toAdd.Username)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         private void searchText_KeyDown (object sender, KeyEventArgs e)
@@ -393,18 +417,19 @@ namespace HolidayMailler
         {
             I_Account sendingAccount = this.sendAsBox.SelectedItem as I_Account;
 
-            if (sendingAccount.Password == null)
+            if (sendingAccount != null && sendingAccount.Password != null)
             {
+                this.senderPasswordBox.IsEnabled = false;
+                this.passwordLabel.IsEnabled = false;
+                this.senderPasswordBox.Clear();
+            }
+            else
+            {
+                //this.sendAsBox.Text = sendingAccount.Username;
                 this.senderPasswordBox.Clear();
                 this.senderPasswordBox.IsEnabled = true;
                 this.passwordLabel.IsEnabled = true;
             }
-            else
-            {
-                this.senderPasswordBox.IsEnabled = false;
-                this.passwordLabel.IsEnabled = false;
-            }
         }
-
     }
 }
