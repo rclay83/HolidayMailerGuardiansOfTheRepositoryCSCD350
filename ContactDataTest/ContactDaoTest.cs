@@ -103,7 +103,7 @@ namespace ContactDataTest
             Assert.AreEqual(mock.FirstName, map[mock.Email].FirstName);
         }
         [TestMethod]
-        [ExpectedException(typeof(ContactDataExcpetion))]
+        [ExpectedException(typeof(ContactDataException))]
         public void TestInsertContactNoEmail()
         {
             IContact toAdd = new Contact() { LastName = "some name last", FirstName = "some first name" };
@@ -112,7 +112,7 @@ namespace ContactDataTest
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ContactDataExcpetion))]
+        [ExpectedException(typeof(ContactDataException))]
         public void TestInsertContactNoFirstName()
         {
             IContact toAdd = new Contact() { LastName = "some name last", Email = "some email" };

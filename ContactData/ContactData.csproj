@@ -51,7 +51,7 @@
     <Compile Include="CDAccount.cs" />
     <Compile Include="AccountDao.cs" />
     <Compile Include="Contact.cs" />
-    <Compile Include="ContactDataExcpetion.cs" />
+    <Compile Include="ContactDataException.cs" />
     <Compile Include="IAccountDao.cs" />
     <Compile Include="MockContactDao.cs" />
     <Compile Include="ContactDao.cs" />
