@@ -26,7 +26,6 @@ using System.Windows.Controls;
 
 namespace HolidayMailler
 {
-
     public partial class MainWindow : Window
     {
         private IContactDao contactsDB;
@@ -217,7 +216,7 @@ namespace HolidayMailler
                     }
                     else
                     {
-                        if (sendingAccount.Password == null)
+                        if (sendingAccount.Password == "")
                         {
                             if (this.senderPasswordBox.Password.Length == 0)
                             {
@@ -249,7 +248,7 @@ namespace HolidayMailler
                 }
                 catch (System.Net.Mail.SmtpException ex)
                 {
-                    sendingAccount.Password = null;
+                    sendingAccount.Password = "";
                     MessageBox.Show("Authentication error. Check account credentials.\n" + ex.Message);
                 }
                 catch (Exception ex)
@@ -263,8 +262,8 @@ namespace HolidayMailler
         {
             this.attachments.Clear();
             this.attachmentsListBox.ItemsSource = this.attachments;
-            this.subjectField.Text = "";
-            this.bodyField.Text = "";
+            this.subjectField.Text = "Happy Holidays!";
+            this.bodyField.Text = "Happy holidays from Guardians of the Repository!";
             this.errorLabel.Content = "";
             this.attachmentLabel.Content = "No attachments";
         }
@@ -417,7 +416,7 @@ namespace HolidayMailler
         {
             I_Account sendingAccount = this.sendAsBox.SelectedItem as I_Account;
 
-            if (sendingAccount != null && sendingAccount.Password != null)
+            if (sendingAccount != null && !string.IsNullOrEmpty(sendingAccount.Password))
             {
                 this.senderPasswordBox.IsEnabled = false;
                 this.passwordLabel.IsEnabled = false;
@@ -425,11 +424,31 @@ namespace HolidayMailler
             }
             else
             {
-                //this.sendAsBox.Text = sendingAccount.Username;
                 this.senderPasswordBox.Clear();
                 this.senderPasswordBox.IsEnabled = true;
                 this.passwordLabel.IsEnabled = true;
             }
+        }
+
+        private void useMenu_Click(object sender, RoutedEventArgs e)
+        {
+            string useage =
+                "Email Accounts:\n\n" +
+                "Accounts provided by Gmail, Yahoo, and Hotmail are currently supported.  " +
+                "The password for a sending account must be provided once during each run of the program, as passwords are not saved permanently.  " +
+                
+                "\n\nContacts:\n\n" +
+                "Contacts can be added via the Add Contact menu.  To remove one or more contacts, ensure all contacts to be removed have a check in the selected column.  " +
+                "When all contacts to be removed have been selected, press the Remove Selected button to permanently delete them from the database.  " +
+
+                "\n\nSending Mail:\n\n" +
+                "To send an email, at least one contact and one sending email account must be added.  " +
+                "Adding contacts and email accounts can be done via their respecitve menus.  " +
+                "Click the Select column next to a given contact to send mail to that contact.  " +
+                "Once all the desired contacts are selected, click the Compose Mail button to transition to the email creation page.  " +
+                "";
+
+            MessageBox.Show(useage);
         }
     }
 }

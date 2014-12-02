@@ -4,15 +4,13 @@
         Title="Add New Email Account" Height="208" Width="614" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Grid>
         <TextBox x:Name="accountField" HorizontalAlignment="Left" Height="23" Margin="135,28,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="224"/>
-        <PasswordBox x:Name="passwordField" HorizontalAlignment="Left" Height="24" Margin="135,56,0,0" VerticalAlignment="Top" Width="224"/>
         <Label Content="Username" HorizontalAlignment="Left" Height="23" Margin="24,28,0,0" VerticalAlignment="Top" Width="91"/>
-        <Label Content="Password" HorizontalAlignment="Left" Height="23" Margin="24,57,0,0" VerticalAlignment="Top" Width="91"/>
-        <ComboBox x:Name="serviceBox" HorizontalAlignment="Left" Height="22" Margin="246,86,0,0" VerticalAlignment="Top" SelectedIndex="0" Width="113">
+        <ComboBox x:Name="serviceBox" HorizontalAlignment="Left" Height="22" Margin="246,68,0,0" VerticalAlignment="Top" SelectedIndex="0" Width="113">
             <ComboBoxItem Content="Gmail"/>
             <ComboBoxItem Content="Yahoo"/>
             <ComboBoxItem Content="Hotmail"/>
         </ComboBox>
-        <Label Content="Service" HorizontalAlignment="Left" Height="23" Margin="24,85,0,0" VerticalAlignment="Top" Width="91"/>
+        <Label Content="Service" HorizontalAlignment="Left" Height="23" Margin="24,67,0,0" VerticalAlignment="Top" Width="91"/>
         <Button x:Name="addButton" Content="Add Account" HorizontalAlignment="Right" Height="28" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="106" Click="addButton_Click"/>
         <Label Content="Example:   thisIsntHard@gmail.com" HorizontalAlignment="Right" Height="23" Margin="0,28,10,0" VerticalAlignment="Top" Width="188" FontSize="10.5"/>
         <Label Content="Note: Some providers may require enabling of SMTP services" HorizontalAlignment="Left" Height="28" Margin="24,0,0,10" VerticalAlignment="Bottom" Width="335"/>

@@ -16,6 +16,7 @@
                 <MenuItem Name="viewAllMenu" Header="View All" Click="viewAllMenu_Click" InputGestureText="Ctrl+A"/>
             </MenuItem>
             <MenuItem Name="helpMenu" Header="Help">
+                <MenuItem Name="useMenu" Header="How To Use" InputGestureText="Alt+H" Click="useMenu_Click"/>
                 <MenuItem Name="aboutMenu" Header="About" Click="aboutMenu_Click" InputGestureText="Alt+A"/>
             </MenuItem>
         </Menu>
@@ -24,7 +25,7 @@
                 <Grid Background="#FFE5E5E5">
                     <DataGrid x:Name="contactsTable" Margin="21,10,23,39" ColumnWidth="*" AutoGenerateColumns="False" HeadersVisibility="Column">
                         <DataGrid.Columns>
-                            <DataGridCheckBoxColumn Header="Send" Width="40" CanUserResize="False" CanUserSort="False">
+                            <DataGridCheckBoxColumn Header="Select" Width="55" CanUserResize="False" CanUserSort="False">
                                 <DataGridCheckBoxColumn.CellStyle>
                                     <Style>
                                         <EventSetter Event="CheckBox.Checked" Handler="OnContactChecked"/>
@@ -50,7 +51,7 @@
                 <Grid Background="#FFE5E5E5">
                     <DataGrid x:Name="resultsTable" Margin="21,63,23,39" ColumnWidth="*" AutoGenerateColumns="False" HeadersVisibility="Column">
                         <DataGrid.Columns>
-                            <DataGridCheckBoxColumn Header="Send" Width="40" CanUserResize="False" CanUserSort="False">
+                            <DataGridCheckBoxColumn Header="Select" Width="55" CanUserResize="False" CanUserSort="False">
                                 <DataGridCheckBoxColumn.CellStyle>
                                     <Style>
                                         <EventSetter Event="CheckBox.Checked" Handler="OnResultChecked"/>
@@ -85,9 +86,9 @@
             </TabItem>
             <TabItem x:Name="mailTab" Header="Mail" TabIndex="2">
                 <Grid Background="#FFE5E5E5">
-                    <TextBox x:Name="bodyField" Margin="133,120,27,159" TextWrapping="Wrap"/>
+                    <TextBox x:Name="bodyField" Text="Happy holidays from Guardians of the Repository!" Margin="133,120,27,159" TextWrapping="Wrap"/>
                     <Button x:Name="attatchButton" Content="Attatch" HorizontalAlignment="Left" Height="27" Margin="21,0,0,58" VerticalAlignment="Bottom" Width="96" RenderTransformOrigin="0.458,-0.409" Click="attatchButton_Click"/>
-                    <TextBox x:Name="subjectField" Height="22" Margin="133,83,27,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                    <TextBox x:Name="subjectField" Text="Happy Holidays!" Height="22" Margin="133,83,27,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
                     <TextBox x:Name="sendToField" Height="22" Margin="133,47,27,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True"/>
                     <Label Content="Send to:" HorizontalAlignment="Left" Height="31" Margin="21,47,0,0" VerticalAlignment="Top" Width="85"/>
                     <Button x:Name="sendButton" Content="Send Mail" Height="27" Margin="0,0,27,10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="96" Click="sendButton_Click"/>
@@ -98,8 +99,8 @@
                     <Label x:Name="attachmentLabel" Content="No attachments" Margin="21,0,0,113" HorizontalAlignment="Left" Width="107" Height="27" VerticalAlignment="Bottom"/>
                     <Label Content="Send as:" HorizontalAlignment="Left" Height="31" Margin="21,10,0,0" VerticalAlignment="Top" Width="85"/>
                     <ComboBox x:Name="sendAsBox" HorizontalAlignment="Left" Height="22" Margin="133,10,0,0" VerticalAlignment="Top" Width="279" SelectedIndex="0" SelectionChanged="sendAsBox_SelectionChanged"/>
-                    <PasswordBox x:Name="senderPasswordBox" HorizontalAlignment="Right" Height="22" Margin="0,10,27,0" VerticalAlignment="Top" Width="199" IsEnabled="False"/>
-                    <Label x:Name="passwordLabel" Content="Password&#xD;&#xA;" HorizontalAlignment="Right" Margin="0,10,231,0" VerticalAlignment="Top" Width="64" Height="31" IsEnabled="False"/>
+                    <PasswordBox x:Name="senderPasswordBox" HorizontalAlignment="Right" Height="22" Margin="0,10,27,0" VerticalAlignment="Top" Width="199"/>
+                    <Label x:Name="passwordLabel" Content="Password&#xD;&#xA;" HorizontalAlignment="Right" Margin="0,10,231,0" VerticalAlignment="Top" Width="64" Height="31"/>
                 </Grid>
             </TabItem>
         </TabControl>

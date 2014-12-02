@@ -10,7 +10,6 @@ using System.Windows;
  *  
  *  NewAccountWindow class is responsible for providing fields for the user
  *  to specify new account information
- *  
  */
 
 namespace HolidayMailler
@@ -42,13 +41,13 @@ namespace HolidayMailler
             string emailRegex = @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
                                   @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))$";
 
-            if (Regex.IsMatch(this.accountField.Text, emailRegex, RegexOptions.IgnoreCase) && this.passwordField.Password.Length > 0)
+            if (Regex.IsMatch(this.accountField.Text, emailRegex, RegexOptions.IgnoreCase))
             {
                 this.account.Username = this.accountField.Text;
                 this.account.Sender = this.account.Username;
-                this.account.Password = this.passwordField.Password;
                 this.account.SSL = true;
                 this.account.Port = 587;
+                this.account.Password = "";
 
                 switch (this.serviceBox.SelectedIndex)
                 {
