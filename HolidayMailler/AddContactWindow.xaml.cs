@@ -7,7 +7,7 @@ using System.Windows.Input;
  *  Guardians of the Repository
  * 
  *  Author: Marcus Sanchez
- *  Last revision:  11/20/2014
+ *  Last revision:  12/2/2014
  *  
  *  AddContactWindow is responsible for prompting the user for new contact information.
  *  
@@ -22,6 +22,7 @@ namespace HolidayMailler
         public AddContactWindow (IContact newContact)
         {
             InitializeComponent();
+            this.firstNameField.Focus();
             this.contact = newContact;
         }
 

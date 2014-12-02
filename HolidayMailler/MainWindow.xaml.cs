@@ -14,14 +14,13 @@ using System.Windows.Controls;
  *  Guardians of the Repository
  * 
  *  Author: Marcus Sanchez
- *  Last revision:  11/20/2014
+ *  Last revision:  12/2/2014
  *  
  *  MainWindow class is the main GUI for the mail client.
  *  User interation with contact database and mail sending occurs here.
  *  
  *  TO DO:
  *      -If contact is deleted/selected in contacts/search tab update other
- *      - BUG: cannot change sending account after sending an email
  */
 
 namespace HolidayMailler
@@ -113,10 +112,11 @@ namespace HolidayMailler
                 }
 
                 this.selectedContacts.Clear();
-            }
-            this.contactsTable.CancelEdit();
-            this.contactsTable.Items.Refresh();
 
+                this.contactsTable.CommitEdit();
+                this.contactsTable.Items.Refresh();
+            }
+            
             if (this.selectedContacts.Count == 0)
             {
                 this.removeContactMenu.IsEnabled = false;
@@ -126,7 +126,7 @@ namespace HolidayMailler
 
         private void aboutMenu_Click (object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Holiday Mailer\n\nTeam: Guardians of the Repository\nVersion: 0.00000001");
+            MessageBox.Show("Holiday Mailer\n\nTeam: Guardians of the Repository\nVersion: 0.5");
         }
 
         private void OnContactChecked (object sender, RoutedEventArgs e)
@@ -308,6 +308,21 @@ namespace HolidayMailler
             else if (Keyboard.IsKeyDown(Key.LeftCtrl) && Keyboard.IsKeyDown(Key.E))
             {
                 newAccountMenu_Click(sender, e);
+            }
+
+            else if (this.removeContactMenu.IsEnabled && (Keyboard.IsKeyDown(Key.LeftCtrl) && Keyboard.IsKeyDown(Key.R)))
+            {
+                removeContactMenu_Click(sender, e);
+            }
+
+            else if (Keyboard.IsKeyDown(Key.LeftAlt) && Keyboard.IsKeyDown(Key.H))
+            {
+                useMenu_Click(sender, e);
+            }
+
+            else if (Keyboard.IsKeyDown(Key.LeftAlt) && Keyboard.IsKeyDown(Key.A))
+            {
+                aboutMenu_Click(sender, e);
             }
         }
 

@@ -3,8 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Add New Email Account" Height="208" Width="614" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Grid>
-        <TextBox x:Name="accountField" HorizontalAlignment="Left" Height="23" Margin="135,28,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="224"/>
+        <TextBox x:Name="accountField" HorizontalAlignment="Left" Height="23" Margin="135,28,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="224" KeyDown="fieldKeyDown"/>
         <Label Content="Username" HorizontalAlignment="Left" Height="23" Margin="24,28,0,0" VerticalAlignment="Top" Width="91"/>
+        <Label x:Name="errorLabel" Content="" Margin="24,110,0,0" Foreground="#FFEA1616" HorizontalAlignment="Left" Width="335" Height="27" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
         <ComboBox x:Name="serviceBox" HorizontalAlignment="Left" Height="22" Margin="246,68,0,0" VerticalAlignment="Top" SelectedIndex="0" Width="113">
             <ComboBoxItem Content="Gmail"/>
             <ComboBoxItem Content="Yahoo"/>

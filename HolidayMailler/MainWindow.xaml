@@ -12,7 +12,7 @@
             </MenuItem>
             <MenuItem Name="contactMenu" Header="Contacts">
                 <MenuItem Name="addContactMenu" Header="Add New Contact" Click="addContactMenu_Click" InputGestureText="Ctrl+N"/>
-                <MenuItem Name="removeContactMenu" Header="Remove selected" IsEnabled="False" Click="removeContactMenu_Click"/>
+                <MenuItem Name="removeContactMenu" Header="Remove selected" IsEnabled="False" Click="removeContactMenu_Click" InputGestureText="Ctrl+R"/>
                 <MenuItem Name="viewAllMenu" Header="View All" Click="viewAllMenu_Click" InputGestureText="Ctrl+A"/>
             </MenuItem>
             <MenuItem Name="helpMenu" Header="Help">
@@ -40,10 +40,10 @@
                             <DataGridCheckBoxColumn Header="Received" Binding="{Binding GotMail}" Width="60" CanUserResize="False" IsReadOnly="True"></DataGridCheckBoxColumn>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <Button x:Name="composeButton" Content="Compose Mail" Margin="0,0,23,7" Height="21" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="87" Click="composeButton_Click" ToolTipService.ShowOnDisabled="True"/>
+                    <Button x:Name="composeButton" Content="Compose Mail" Margin="0,0,23,7" Height="21" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="87" Click="composeButton_Click" ToolTipService.ShowOnDisabled="True" ToolTip="Create a new email message"/>
                     <Label x:Name="selectionCountLabel" Content="0 Contacts Selected" HorizontalAlignment="Left" Height="30" Margin="21,0,0,0" VerticalAlignment="Bottom" Width="126"/>
                     <Label x:Name="searchResultsLabel" Content="" HorizontalAlignment="Left" Height="30" Margin="451,0,0,39" VerticalAlignment="Bottom" Width="126"/>
-                    <Button x:Name="removeButton" Content="Remove Selected" Height="23" Margin="0,0,329,7" VerticalAlignment="Bottom" Click="removeContactMenu_Click" HorizontalAlignment="Right" Width="104" IsEnabled="False"/>
+                    <Button x:Name="removeButton" Content="Remove Selected" Height="23" Margin="0,0,329,7" VerticalAlignment="Bottom" Click="removeContactMenu_Click" HorizontalAlignment="Right" Width="104" IsEnabled="False" ToolTip="Permanently remove selected contacts"/>
                 </Grid>
 
             </TabItem>
@@ -79,19 +79,19 @@
                         <ComboBoxItem Content="Contains"/>
                         <ComboBoxItem Content="Begins with"/>
                     </ComboBox>
-                    <Button x:Name="searchButton" Content="Search" Height="22" Margin="0,20,23,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91" Click="searchButton_Click"/>
-                    <Button Content="Compose Mail" Margin="0,0,23,7" Height="21" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="87" Click="composeButton_Click" ToolTipService.ShowOnDisabled="True"/>
-                    <Button x:Name="searchRemoveButton" Content="Remove Selected" Height="23" Margin="0,0,329,7" VerticalAlignment="Bottom" Click="removeContactMenu_Click" HorizontalAlignment="Right" Width="104" IsEnabled="False"/>
+                    <Button x:Name="searchButton" Content="Search" Height="22" Margin="0,20,23,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91" Click="searchButton_Click" ToolTip="Search all contacts using provided parameters"/>
+                    <Button Content="Compose Mail" Margin="0,0,23,7" Height="21" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="87" Click="composeButton_Click" ToolTipService.ShowOnDisabled="True" ToolTip="Create a new email message"/>
+                    <Button x:Name="searchRemoveButton" Content="Remove Selected" Height="23" Margin="0,0,329,7" VerticalAlignment="Bottom" Click="removeContactMenu_Click" HorizontalAlignment="Right" Width="104" IsEnabled="False" ToolTip="Permanently remove selected contacts"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="mailTab" Header="Mail" TabIndex="2">
                 <Grid Background="#FFE5E5E5">
                     <TextBox x:Name="bodyField" Text="Happy holidays from Guardians of the Repository!" Margin="133,120,27,159" TextWrapping="Wrap"/>
-                    <Button x:Name="attatchButton" Content="Attatch" HorizontalAlignment="Left" Height="27" Margin="21,0,0,58" VerticalAlignment="Bottom" Width="96" RenderTransformOrigin="0.458,-0.409" Click="attatchButton_Click"/>
+                    <Button x:Name="attatchButton" Content="Attatch" HorizontalAlignment="Left" Height="27" Margin="21,0,0,58" VerticalAlignment="Bottom" Width="96" RenderTransformOrigin="0.458,-0.409" Click="attatchButton_Click" ToolTip="Opens a window to attach files"/>
                     <TextBox x:Name="subjectField" Text="Happy Holidays!" Height="22" Margin="133,83,27,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
                     <TextBox x:Name="sendToField" Height="22" Margin="133,47,27,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True"/>
                     <Label Content="Send to:" HorizontalAlignment="Left" Height="31" Margin="21,47,0,0" VerticalAlignment="Top" Width="85"/>
-                    <Button x:Name="sendButton" Content="Send Mail" Height="27" Margin="0,0,27,10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="96" Click="sendButton_Click"/>
+                    <Button x:Name="sendButton" Content="Send Mail" Height="27" Margin="0,0,27,10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="96" Click="sendButton_Click" ToolTip="Send the current email to selected contacts"/>
                     <Label Content="Subject" HorizontalAlignment="Left" Height="31" Margin="21,83,0,0" VerticalAlignment="Top" Width="85" RenderTransformOrigin="0.576,0.742"/>
                     <Label x:Name="errorLabel" Content="" Margin="0,0,186,10" Foreground="#FFEA1616" HorizontalAlignment="Right" Width="451" Height="27" VerticalAlignment="Bottom" VerticalContentAlignment="Center"/>
                     <Label Content="Body" HorizontalAlignment="Left" Height="24" Margin="21,120,0,0" VerticalAlignment="Top" Width="102"/>

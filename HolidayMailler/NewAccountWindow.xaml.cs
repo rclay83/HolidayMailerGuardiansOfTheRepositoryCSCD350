@@ -1,12 +1,13 @@
 ﻿using Email;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Input;
 
 /*  Holiday Mailer
  *  Guardians of the Repository
  * 
  *  Author: Marcus Sanchez
- *  Last revision:  11/20/2014
+ *  Last revision:  12/2/2014
  *  
  *  NewAccountWindow class is responsible for providing fields for the user
  *  to specify new account information
@@ -29,6 +30,7 @@ namespace HolidayMailler
         {
             this.account = account;
             InitializeComponent();
+            this.accountField.Focus();
         }
 
         /*  Mail services utilize same ports and SSL, only unique attribute is SmtpServer
@@ -51,20 +53,32 @@ namespace HolidayMailler
 
                 switch (this.serviceBox.SelectedIndex)
                 {
-                    case ((int)MailService.Gmail):
+                    case ((int) MailService.Gmail):
                         this.account.SmtpServer = "smtp.gmail.com";
                         break;
 
-                    case ((int)MailService.Yahoo):
+                    case ((int) MailService.Yahoo):
                         this.account.SmtpServer = "smtp.mail.yahoo.com";
                         break;
 
-                    case ((int)MailService.Hotmail):
+                    case ((int) MailService.Hotmail):
                         this.account.SmtpServer = "smtp.live.com";
                         break;
                 }
 
                 this.Close();
+            }
+            else
+            {
+                this.errorLabel.Content = "Invalid email address.";
+            }
+        }
+
+        private void fieldKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                addButton_Click(sender, e);
             }
         }
     }
