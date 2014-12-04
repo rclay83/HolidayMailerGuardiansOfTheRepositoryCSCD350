@@ -69,7 +69,7 @@ namespace ContactData
                 }
                 catch (SQLiteException err)
                 {
-                    throw new ContactDataExcpetion("Cannot return all contacts. unexpected sqlite exception: " +
+                    throw new ContactDataException("Cannot return all contacts. unexpected sqlite exception: " +
                     err.Message);
                 }
                 finally
@@ -120,11 +120,11 @@ namespace ContactData
         {
             if (null == toAdd.FirstName || null == toAdd.Email)
             {
-                throw new ContactDataExcpetion("Missing required table field");
+                throw new ContactDataException("Missing required table field");
             }
             if (0 == toAdd.FirstName.Length || 0 == toAdd.Email.Length)
             {
-                throw new ContactDataExcpetion("Missing required table field");
+                throw new ContactDataException("Missing required table field");
             }
             using (IDbCommand command = connection.CreateCommand())
             {
@@ -148,7 +148,7 @@ namespace ContactData
                 }
                 catch (SQLiteException ex)
                 {
-                    throw new ContactDataExcpetion("Unexpected SQLException: " + ex.Message);
+                    throw new ContactDataException("Unexpected SQLException: " + ex.Message);
                 }
                 finally
                 {
@@ -165,7 +165,7 @@ namespace ContactData
         {
             if (String.IsNullOrEmpty(toRemove.Email))
             {
-                throw new ContactDataExcpetion("Missing required table field");
+                throw new ContactDataException("Missing required table field");
             }
             
             using (IDbCommand command = connection.CreateCommand())
@@ -186,7 +186,7 @@ namespace ContactData
                 }
                 catch (SQLiteException ex)
                 {
-                    throw new ContactDataExcpetion("Unexpected SQLException: " + ex.Message);
+                    throw new ContactDataException("Unexpected SQLException: " + ex.Message);
                 }
                 finally
                 {
@@ -200,11 +200,11 @@ namespace ContactData
         {
             if (null == toUpdate.FirstName || null == toUpdate.Email || null == toUpdate.LastName)
             {
-                throw new ContactDataExcpetion("Missing required table field");
+                throw new ContactDataException("Missing required table field");
             }
             if (0 == toUpdate.FirstName.Length || 0 == toUpdate.Email.Length)
             {
-                throw new ContactDataExcpetion("Missing required table field");
+                throw new ContactDataException("Missing required table field");
             }
             using (IDbCommand command = connection.CreateCommand())
             {
@@ -229,7 +229,7 @@ namespace ContactData
                 }
                 catch (SQLiteException ex)
                 {
-                    throw new ContactDataExcpetion("Unexpected SQLException: " + ex.Message);
+                    throw new ContactDataException("Unexpected SQLException: " + ex.Message);
                 }
                 finally
                 {

@@ -51,7 +51,7 @@ namespace ContactData
            
             if(null == toAdd.FirstName || null == toAdd.Email)
             {
-                throw new ContactDataExcpetion("Missing required table field");
+                throw new ContactDataException("Missing required table field");
             }
             return true;
         }
@@ -61,7 +61,7 @@ namespace ContactData
         {
             if (null == toRemove.FirstName || null == toRemove.Email)
             {
-                throw new ContactDataExcpetion("Missing required table field");
+                throw new ContactDataException("Missing required table field");
             }
             return true;
         }
@@ -70,7 +70,7 @@ namespace ContactData
         {
             if (null == toUpdate.FirstName || null == toUpdate.Email)
             {
-                throw new ContactDataExcpetion("Missing required table field");
+                throw new ContactDataException("Missing required table field");
             }
             return true;
         }

@@ -22,7 +22,7 @@ namespace ContactData
         {
             if (String.IsNullOrEmpty(toAdd.Username) || String.IsNullOrEmpty(toAdd.SmtpServer))
             {
-                throw new ContactDataExcpetion("Missing required table field");
+                throw new ContactDataException("Missing required table field");
             }
             
             using (IDbCommand command = connection.CreateCommand())
@@ -53,7 +53,7 @@ namespace ContactData
                 }
                 catch (SQLiteException ex)
                 {
-                    throw new ContactDataExcpetion("Unexpected SQLException: " + ex.Message);
+                    throw new ContactDataException("Unexpected SQLException: " + ex.Message);
                 }
                 finally
                 {
@@ -67,7 +67,7 @@ namespace ContactData
         {
             if (String.IsNullOrEmpty(toRemove.Username))
             {
-                throw new ContactDataExcpetion("Missing required table field");
+                throw new ContactDataException("Missing required table field");
             }
 
             using (IDbCommand command = connection.CreateCommand())
@@ -87,7 +87,7 @@ namespace ContactData
                 }
                 catch (SQLiteException ex)
                 {
-                    throw new ContactDataExcpetion("Unexpected SQLException: " + ex.Message);
+                    throw new ContactDataException("Unexpected SQLException: " + ex.Message);
                 }
                 finally
                 {
@@ -175,7 +175,7 @@ namespace ContactData
                 }
                 catch (SQLiteException err)
                 {
-                    throw new ContactDataExcpetion(
+                    throw new ContactDataException(
                         "Cannot return Accounts. Unexpected SQLite exception occured: " +
                     err.Message);
                 }

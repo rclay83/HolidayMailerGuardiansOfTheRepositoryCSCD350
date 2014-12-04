@@ -5,11 +5,11 @@ using System.Text;
 
 namespace ContactData
 {
-    public class ContactDataExcpetion : Exception
+    public class ContactDataException : Exception
     {
         private string message;
 
-        public ContactDataExcpetion(string message)
+        public ContactDataException(string message)
         {
             
             this.message = message;

@@ -11,5 +11,6 @@ namespace ContactData
         String LastName { get; set; }
         String Email { get; set; }
         bool GotMail { get; set; }
+        bool Selected { get; set; }
     }
 }
