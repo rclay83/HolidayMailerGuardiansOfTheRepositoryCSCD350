@@ -62,5 +62,9 @@ namespace ContactData
         {
             return (FirstName == null ? 17 : FirstName.GetHashCode()) ^ (Email == null ? 17 : Email.GetHashCode());
         }
+
+
+        public bool Selected { get; set; }
+        
     }
 }

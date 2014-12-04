@@ -55,5 +55,18 @@ namespace ContactData
                 this._gotMail = value;
             }
         }
+
+
+        public bool Selected
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }
