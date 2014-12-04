@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Email
 {
-    class Account : I_Account
+    public class Account : I_Account
     {
         private string _username;
         private string _password;
