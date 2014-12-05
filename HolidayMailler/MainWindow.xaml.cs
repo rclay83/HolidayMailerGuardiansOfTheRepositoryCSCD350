@@ -231,7 +231,7 @@ namespace HolidayMailler
                             }
                         }
 
-                        this.message = new MockMailMan(sendingAccount, recipients, this.subjectField.Text, this.bodyField.Text);
+                        this.message = new MailMan(sendingAccount, recipients, this.subjectField.Text, this.bodyField.Text);
 
                         if (this.attachments.Count > 0)
                         {
@@ -379,7 +379,7 @@ namespace HolidayMailler
 
         private void newAccountMenu_Click (object sender, RoutedEventArgs e)
         {
-            I_Account acc = new MockAccount();
+            I_Account acc = new Account();
             acc.Username = "";
 
             NewAccountWindow addAccountWindow = new NewAccountWindow(acc);
