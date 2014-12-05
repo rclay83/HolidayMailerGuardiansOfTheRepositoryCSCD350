@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Email
 {
-    class MailMan : I_MailMan
+    public class MailMan : I_MailMan
     {
         private string[] _recipients;
         private string _subject;
