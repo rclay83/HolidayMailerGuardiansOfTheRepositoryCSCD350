@@ -54,7 +54,7 @@
     <ApplicationIcon>images\icon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>BB62A5834330FA6B97EA8248DD82314019259F3F</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>4D79FD467E5AD043D14F74141AD4FB2A9FEF8DC0</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestKeyFile>HolidayMailler_TemporaryKey.pfx</ManifestKeyFile>
@@ -63,7 +63,7 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ContactData, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
@@ -144,7 +144,6 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <None Include="HolidayMailler_TemporaryKey.pfx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
