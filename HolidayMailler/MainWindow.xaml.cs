@@ -14,13 +14,10 @@ using System.Windows.Controls;
  *  Guardians of the Repository
  * 
  *  Author: Marcus Sanchez
- *  Last revision:  12/2/2014
+ *  Last revision:  12/4/2014
  *  
  *  MainWindow class is the main GUI for the mail client.
  *  User interation with contact database and mail sending occurs here.
- *  
- *  TO DO:
- *      -If contact is deleted/selected in contacts/search tab update other
  */
 
 namespace HolidayMailler
@@ -30,7 +27,7 @@ namespace HolidayMailler
         private IContactDao contactsDB;
         private IAccountDao accountsDB;
 
-        private List<IContact> contactList;
+        private ObservableCollection<IContact> contactList;
         private ObservableCollection<IContact> selectedContacts;
         private List<I_Account> accounts;
         private I_MailMan message;
@@ -42,7 +39,7 @@ namespace HolidayMailler
             this.contactsDB = new ContactDao();
             this.accountsDB = new AccountDao();
 
-            this.contactList = this.contactsDB.getAllContacts().Values.ToList();
+            this.contactList = new ObservableCollection<IContact>(this.contactsDB.getAllContacts().Values.ToList());
             this.accounts = this.accountsDB.getAccounts() as List<I_Account>;
             this.contactsTable.ItemsSource = contactList;
 
@@ -66,15 +63,16 @@ namespace HolidayMailler
                 this.removeContactMenu.IsEnabled = true;
                 this.removeButton.IsEnabled = true;
                 this.searchRemoveButton.IsEnabled = true;
+
+                UpdateRecipientField();
             }
             else
             {
                 this.removeContactMenu.IsEnabled = false;
                 this.removeButton.IsEnabled = false;
                 this.searchRemoveButton.IsEnabled = false;
+                this.sendToField.Text = "";
             }
-
-            UpdateRecipientField();
         }
 
         private void addContactMenu_Click (object sender, RoutedEventArgs e)
@@ -91,7 +89,7 @@ namespace HolidayMailler
                     this.contactList.Add(toAdd);
                     this.contactsTable.Items.Refresh();
                 }
-                catch (ContactDataExcpetion ex)
+                catch (ContactDataException ex)
                 {
                     MessageBox.Show("There is already a contact in the databse with that email.");
                 }
@@ -133,32 +131,36 @@ namespace HolidayMailler
         {
             IContact selected = this.contactsTable.SelectedItem as IContact;
 
-            if (!this.selectedContacts.Contains(selected))
+            if (selected != null && !this.selectedContacts.Contains(selected))
             {
                 this.selectedContacts.Add(selected);
+                selected.Selected = true;
             }
         }
 
         private void OnContactUnchecked (object sender, RoutedEventArgs e)
         {
-            var table = sender as DataGrid;
-            this.selectedContacts.Remove(this.resultsTable.SelectedItem as IContact);
+            IContact selected = this.contactsTable.SelectedItem as IContact;
+            this.selectedContacts.Remove(selected);
+            selected.Selected = false;
         }
 
         private void OnResultChecked (object sender, RoutedEventArgs e)
         {
             IContact selected = this.resultsTable.SelectedItem as IContact;
 
-            if (!this.selectedContacts.Contains(selected))
+            if (selected != null && !this.selectedContacts.Contains(selected))
             {
                 this.selectedContacts.Add(selected);
+                selected.Selected = true;
             }
         }
 
         private void OnResultUnchecked (object sender, RoutedEventArgs e)
         {
-            var table = sender as DataGrid;
-            this.selectedContacts.Remove(this.contactsTable.SelectedItem as IContact);
+            IContact selected = this.resultsTable.SelectedItem as IContact;
+            this.selectedContacts.Remove(selected);
+            selected.Selected = false;
         }
 
         private void exitMenu_Click (object sender, RoutedEventArgs e)
@@ -370,7 +372,7 @@ namespace HolidayMailler
                     return false;
                 });
 
-                List<IContact> contactResults = results.ToList();
+                ObservableCollection<IContact> contactResults = new ObservableCollection<IContact>(results.ToList());
                 this.resultsTable.ItemsSource = contactResults;
             }
         }
@@ -398,7 +400,7 @@ namespace HolidayMailler
                     }
 
                 }
-                catch (ContactDataExcpetion ex)
+                catch (ContactDataException ex)
                 {
                     MessageBox.Show(ex.Message);
                 }
