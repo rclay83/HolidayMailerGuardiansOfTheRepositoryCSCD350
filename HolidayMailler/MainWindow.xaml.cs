@@ -133,6 +133,7 @@ namespace HolidayMailler
 
             if (selected != null && !this.selectedContacts.Contains(selected))
             {
+                this.resultsTable.UnselectAll();
                 this.selectedContacts.Add(selected);
                 selected.Selected = true;
             }
@@ -141,8 +142,12 @@ namespace HolidayMailler
         private void OnContactUnchecked (object sender, RoutedEventArgs e)
         {
             IContact selected = this.contactsTable.SelectedItem as IContact;
-            this.selectedContacts.Remove(selected);
-            selected.Selected = false;
+            if (this.selectedContacts.Contains(selected))
+            {
+                this.resultsTable.UnselectAll();
+                this.selectedContacts.Remove(selected);
+                selected.Selected = false;
+            }
         }
 
         private void OnResultChecked (object sender, RoutedEventArgs e)
@@ -151,6 +156,7 @@ namespace HolidayMailler
 
             if (selected != null && !this.selectedContacts.Contains(selected))
             {
+                this.contactsTable.UnselectAll();
                 this.selectedContacts.Add(selected);
                 selected.Selected = true;
             }
@@ -159,8 +165,13 @@ namespace HolidayMailler
         private void OnResultUnchecked (object sender, RoutedEventArgs e)
         {
             IContact selected = this.resultsTable.SelectedItem as IContact;
-            this.selectedContacts.Remove(selected);
-            selected.Selected = false;
+
+            if (this.selectedContacts.Contains(selected))
+            {
+                this.contactsTable.UnselectAll();
+                this.selectedContacts.Remove(selected);
+                selected.Selected = false;
+            }
         }
 
         private void exitMenu_Click (object sender, RoutedEventArgs e)

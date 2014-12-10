@@ -25,7 +25,7 @@
                 <Grid Background="#FFE5E5E5">
                     <DataGrid x:Name="contactsTable" Margin="21,10,23,39" ColumnWidth="*" AutoGenerateColumns="False" HeadersVisibility="Column">
                         <DataGrid.Columns>
-                            <DataGridCheckBoxColumn Header="Select" Binding="{Binding Selected}" Width="55" CanUserResize="False" CanUserSort="False">
+                            <DataGridCheckBoxColumn Header="Select" Binding="{Binding Selected}" Width="55" CanUserResize="False" CanUserSort="False" IsReadOnly="False">
                                 <DataGridCheckBoxColumn.CellStyle>
                                     <Style>
                                         <EventSetter Event="CheckBox.Checked" Handler="OnContactChecked"/>
@@ -34,9 +34,9 @@
                                 </DataGridCheckBoxColumn.CellStyle>
 
                             </DataGridCheckBoxColumn>
-                            <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Email Address" Binding="{Binding Email}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}" IsReadOnly="True"></DataGridTextColumn>
+                            <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}" IsReadOnly="True"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Email Address" Binding="{Binding Email}" IsReadOnly="True"></DataGridTextColumn>
                             <DataGridCheckBoxColumn Header="Received" Binding="{Binding GotMail}" Width="60" CanUserResize="False" IsReadOnly="True"></DataGridCheckBoxColumn>
                         </DataGrid.Columns>
                     </DataGrid>
